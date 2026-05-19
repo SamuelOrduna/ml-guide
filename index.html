@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guía Completa de Machine Learning - Experto en IA</title>
+    <title>Guía Completa de Machine Learning - Aprendizaje Profundo, Refuerzo y Máquinas de Vectores</title>
+
+    <!-- MathJax for LaTeX -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -13,39 +16,93 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.7;
-            color: #1a1a1a;
-            background-color: #ffffff;
+        :root {
+            --primary: #1a3a52;
+            --secondary: #2e5266;
+            --accent: #6c8ebf;
+            --light-accent: #b8cae0;
+            --background: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --border-color: #e0e4e8;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Merriweather', 'Georgia', serif;
+            line-height: 1.75;
+            color: var(--text-primary);
+            background-color: var(--background);
+            background-image:
+                radial-gradient(circle at 20% 80%, rgba(108, 142, 191, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(46, 82, 102, 0.05) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Header */
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a3a52 0%, #2e5266 100%);
             color: white;
-            padding: 60px 20px;
+            padding: 80px 40px;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 40px rgba(26, 58, 82, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-repeat: repeat-x;
+            opacity: 0.3;
+        }
+
+        header > * {
+            position: relative;
+            z-index: 1;
         }
 
         header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 3.2em;
+            margin-bottom: 15px;
             font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 1.2;
         }
 
-        header p {
-            font-size: 1.2em;
+        header .subtitle {
+            font-size: 1.3em;
             opacity: 0.95;
+            font-style: italic;
+            margin-bottom: 10px;
         }
 
+        header .authors {
+            font-size: 0.95em;
+            opacity: 0.85;
+            margin-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            padding-top: 15px;
+        }
+
+        /* Navigation */
         nav {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-bottom: 3px solid #667eea;
+            background-color: var(--card-bg);
+            padding: 0;
+            border-bottom: 2px solid var(--primary);
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         nav ul {
@@ -53,340 +110,529 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+        }
+
+        nav li {
+            flex: 1;
+            min-width: 160px;
+            text-align: center;
         }
 
         nav a {
-            color: #667eea;
+            color: var(--primary);
             text-decoration: none;
             font-weight: 600;
-            padding: 8px 15px;
-            border-radius: 5px;
-            transition: all 0.3s;
+            padding: 18px 15px;
+            display: block;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.95em;
         }
 
         nav a:hover {
-            background-color: #667eea;
-            color: white;
+            background-color: var(--background);
+            border-bottom-color: var(--accent);
+            color: var(--accent);
         }
 
+        /* Main container */
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 60px 30px;
         }
 
-        section {
-            margin-bottom: 50px;
-            padding: 30px;
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            border-left: 5px solid #667eea;
+        /* Table of contents */
+        .toc {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 8px;
+            margin-bottom: 60px;
+            border-left: 5px solid var(--accent);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
-        section h2 {
-            color: #667eea;
-            font-size: 2em;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
+        .toc h2 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            border-bottom: 2px solid var(--light-accent);
+            padding-bottom: 15px;
         }
 
-        section h3 {
-            color: #764ba2;
-            font-size: 1.4em;
-            margin-top: 25px;
-            margin-bottom: 15px;
+        .toc ol {
+            margin-left: 30px;
         }
 
-        p {
-            margin-bottom: 15px;
-            text-align: justify;
+        .toc li {
+            margin-bottom: 12px;
+            color: var(--text-secondary);
             font-size: 1.05em;
         }
 
-        .concept {
-            background-color: white;
-            padding: 20px;
+        /* Sections */
+        section {
+            margin-bottom: 70px;
+            padding: 50px;
+            background-color: var(--card-bg);
             border-radius: 8px;
-            margin: 20px 0;
-            border-left: 4px solid #667eea;
+            border-left: 5px solid var(--accent);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        section h2 {
+            color: var(--primary);
+            font-size: 2.3em;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light-accent);
+            line-height: 1.3;
+        }
+
+        section h3 {
+            color: var(--secondary);
+            font-size: 1.6em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        section h4 {
+            color: var(--accent);
+            font-size: 1.25em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 18px;
+            color: var(--text-secondary);
+            text-align: justify;
+            font-size: 1.05em;
+            line-height: 1.85;
+        }
+
+        /* Concept boxes */
+        .concept {
+            background: linear-gradient(135deg, rgba(108, 142, 191, 0.08) 0%, rgba(184, 202, 224, 0.08) 100%);
+            padding: 25px;
+            border-radius: 6px;
+            margin: 25px 0;
+            border-left: 4px solid var(--accent);
+            border-top: 1px solid var(--light-accent);
         }
 
         .concept strong {
-            color: #667eea;
+            color: var(--primary);
+            font-weight: 700;
         }
 
+        /* Formula boxes */
         .formula {
-            background-color: #f0f1ff;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border: 1px solid #667eea;
+            background: linear-gradient(135deg, #f0f3f8 0%, #e8ecf3 100%);
+            padding: 30px;
+            border-radius: 6px;
+            margin: 30px 0;
+            border: 1px solid var(--light-accent);
             overflow-x: auto;
             text-align: center;
         }
 
-        .formula code {
+        .formula code, .formula p {
             font-family: 'Courier New', monospace;
-            color: #764ba2;
-            font-size: 1.1em;
+            color: var(--primary);
+            font-size: 1em;
+            text-align: center;
         }
 
+        /* Key points */
         .key-point {
-            background-color: #fff3cd;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%);
             border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
+            border-top: 1px solid #ffc107;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 6px;
         }
 
         .key-point strong {
-            color: #ff6b6b;
+            color: #d97706;
+            font-weight: 700;
         }
 
+        /* Example boxes */
         .example {
-            background-color: #e7f3ff;
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.08) 0%, rgba(100, 181, 246, 0.08) 100%);
             border-left: 4px solid #2196F3;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
+            border-top: 1px solid #64B5F6;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 6px;
         }
 
+        .example strong {
+            color: #1565c0;
+        }
+
+        /* Lists */
         ul, ol {
-            margin-left: 30px;
-            margin-bottom: 15px;
+            margin-left: 35px;
+            margin-bottom: 20px;
         }
 
         li {
-            margin-bottom: 10px;
-            line-height: 1.8;
+            margin-bottom: 12px;
+            line-height: 1.85;
+            color: var(--text-secondary);
         }
 
+        /* Tables */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin: 30px 0;
             background-color: white;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
 
         table thead {
-            background-color: #667eea;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
         }
 
-        table th, table td {
-            padding: 15px;
+        table th {
+            padding: 18px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            font-weight: 600;
+            font-family: 'Segoe UI', sans-serif;
+            border-bottom: 2px solid var(--light-accent);
+        }
+
+        table td {
+            padding: 15px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.98em;
         }
 
         table tr:hover {
-            background-color: #f8f9fa;
+            background-color: #f9fbfc;
         }
 
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Comparison boxes */
         .comparison {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 20px 0;
+            gap: 25px;
+            margin: 30px 0;
         }
 
         .comparison-box {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            border: 2px solid #667eea;
+            background: linear-gradient(135deg, rgba(108, 142, 191, 0.08) 0%, rgba(184, 202, 224, 0.08) 100%);
+            padding: 25px;
+            border-radius: 6px;
+            border: 1px solid var(--light-accent);
+            border-left: 4px solid var(--accent);
         }
 
         .comparison-box h4 {
-            color: #667eea;
-            margin-bottom: 10px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            margin-top: 0;
         }
 
+        .comparison-box ul {
+            margin-left: 20px;
+        }
+
+        .comparison-box li {
+            font-size: 0.95em;
+        }
+
+        /* Highlight */
+        .highlight {
+            background-color: #fef3c7;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: 600;
+            color: var(--primary);
+            font-style: italic;
+        }
+
+        /* Footer */
         footer {
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             text-align: center;
-            padding: 30px;
-            margin-top: 50px;
-            border-top: 2px solid #667eea;
-            color: #666;
+            padding: 50px 30px;
+            margin-top: 80px;
+            color: white;
+            border-top: 5px solid var(--accent);
         }
 
+        footer p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .references {
+            font-size: 0.9em;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .reference-item {
+            margin: 8px 0;
+            font-style: italic;
+            opacity: 0.85;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             header h1 {
-                font-size: 1.8em;
+                font-size: 2em;
             }
 
-            nav ul {
-                flex-direction: column;
-                gap: 10px;
+            header .subtitle {
+                font-size: 1.1em;
             }
 
             section {
-                padding: 20px;
+                padding: 30px 20px;
+            }
+
+            section h2 {
+                font-size: 1.7em;
+            }
+
+            section h3 {
+                font-size: 1.3em;
+            }
+
+            .container {
+                padding: 30px 15px;
             }
 
             .comparison {
                 grid-template-columns: 1fr;
             }
+
+            .toc {
+                padding: 25px;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav li {
+                min-width: unset;
+            }
+
+            nav a {
+                padding: 15px 10px;
+                font-size: 0.9em;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            table th, table td {
+                padding: 12px 10px;
+            }
         }
 
-        .toc {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 40px;
-            border: 2px solid #667eea;
+        /* MathJax styling */
+        .MathJax {
+            outline: none !important;
         }
 
-        .toc h2 {
-            color: #667eea;
-            margin-bottom: 20px;
+        mjx-container {
+            overflow: auto;
+            margin: 20px 0;
         }
 
-        .toc ol {
-            margin-left: 20px;
+        /* Badge styles */
+        .section-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            line-height: 35px;
+            text-align: center;
+            margin-right: 10px;
+            font-weight: 700;
+            font-family: 'Segoe UI', sans-serif;
         }
 
-        .highlight {
-            background-color: #fff3cd;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-weight: 600;
-            color: #764ba2;
+        /* Divider */
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--light-accent), transparent);
+            margin: 40px 0;
+        }
+
+        /* Info box */
+        .info-box {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.08) 0%, rgba(100, 181, 246, 0.08) 100%);
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-size: 0.95em;
+            color: var(--text-secondary);
+        }
+
+        .info-box strong {
+            color: #1565c0;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>🚀 Guía Definitiva de Machine Learning</h1>
-        <p>Conviértete en Experto en IA: Del Aprendizaje por Refuerzo a las Redes Profundas</p>
+        <h1>Guía Exhaustiva de Machine Learning</h1>
+        <p class="subtitle">Desde Aprendizaje por Refuerzo hasta Redes Neuronales Profundas</p>
+        <div class="authors">
+            <strong>Basada en:</strong> Sutton & Barto (RL), Hastie et al. (Statistical Learning),
+            Goodfellow et al. (Deep Learning), Cristianini & Shawe-Taylor (Kernel Methods)
+        </div>
     </header>
 
     <nav>
         <ul>
-            <li><a href="#rl">Reinforcement Learning</a></li>
-            <li><a href="#perceptron">Perceptrón</a></li>
-            <li><a href="#svm">SVM</a></li>
-            <li><a href="#kernels">Kernels</a></li>
-            <li><a href="#deep">Deep Learning</a></li>
+            <li><a href="#rl">1. Reinforcement Learning</a></li>
+            <li><a href="#perceptron">2. Perceptrón</a></li>
+            <li><a href="#svm">3. SVM</a></li>
+            <li><a href="#kernels">4. Kernels</a></li>
+            <li><a href="#deep">5. Deep Learning</a></li>
         </ul>
     </nav>
 
     <div class="container">
-        <!-- TABLA DE CONTENIDOS -->
+        <!-- TABLE OF CONTENTS -->
         <div class="toc">
-            <h2>📋 Índice de Contenidos</h2>
+            <h2>📚 Tabla de Contenidos</h2>
             <ol>
-                <li>Aprendizaje por Refuerzo (Reinforcement Learning)</li>
-                <li>Clasificación Lineal - Perceptrón</li>
-                <li>SVM - Máquinas de Vectores de Soporte</li>
-                <li>Kernels y el Truco del Kernel</li>
-                <li>Aprendizaje Profundo y Redes Neuronales</li>
+                <li><strong>Aprendizaje por Refuerzo (RL):</strong> MDPs, Ecuaciones de Bellman, Q-Learning, Control vs Predicción</li>
+                <li><strong>Clasificación Lineal - Perceptrón:</strong> Algoritmo, Convergencia, Aplicación Manual</li>
+                <li><strong>SVM - Máquinas de Vectores de Soporte:</strong> Margen Máximo, KKT, Hinge Loss</li>
+                <li><strong>Kernels y Truco del Kernel:</strong> Polinomiales, RBF, Margen Suave/Duro</li>
+                <li><strong>Aprendizaje Profundo:</strong> Backpropagation, SGD, ReLU, Dimensionalidad</li>
             </ol>
         </div>
 
-        <!-- SECCIÓN 1: REINFORCEMENT LEARNING -->
+        <!-- SECTION 1: REINFORCEMENT LEARNING -->
         <section id="rl">
-            <h2>1️⃣ Aprendizaje por Refuerzo (Reinforcement Learning)</h2>
+            <h2><span class="section-number">1</span> Aprendizaje por Refuerzo: Procesos de Decisión Secuencial</h2>
 
-            <h3>¿Qué es RL y cómo se diferencia del aprendizaje supervisado?</h3>
+            <h3>Fundamentos: RL vs Aprendizaje Supervisado</h3>
 
             <div class="concept">
-                <p><strong>Aprendizaje por Refuerzo (RL):</strong> Es un paradigma donde un agente aprende a tomar decisiones interactuando con un entorno, recibiendo recompensas o castigos por sus acciones. El objetivo es maximizar la recompensa acumulada a lo largo del tiempo.</p>
+                <p><strong>Aprendizaje por Refuerzo (RL)</strong> es un paradigma donde un <em>agente</em> aprende a tomar decisiones secuenciales interactuando con un <em>entorno</em>, recibiendo señales de recompensa que guían su aprendizaje hacia el objetivo de maximizar la recompensa acumulada a largo plazo.</p>
             </div>
 
             <div class="comparison">
                 <div class="comparison-box">
-                    <h4>Aprendizaje Supervisado</h4>
+                    <h4>📊 Aprendizaje Supervisado</h4>
                     <ul>
-                        <li>Requiere datos etiquetados (X, y)</li>
-                        <li>Aprende mapeos entrada → salida</li>
-                        <li>La retroalimentación es inmediata</li>
-                        <li>Datos fijos y predefinidos</li>
-                        <li>Ejemplos: clasificación, regresión</li>
+                        <li>Datos etiquetados: \((x_i, y_i)\)</li>
+                        <li>Mapeo directo entrada → salida</li>
+                        <li>Retroalimentación inmediata</li>
+                        <li>Datos estáticos predefinidos</li>
+                        <li>Ejemplos: Clasificación, Regresión</li>
                     </ul>
                 </div>
                 <div class="comparison-box">
-                    <h4>Aprendizaje por Refuerzo</h4>
+                    <h4>🎮 Aprendizaje por Refuerzo</h4>
                     <ul>
-                        <li>No requiere etiquetas explícitas</li>
-                        <li>Aprende mediante prueba y error</li>
+                        <li>Sin etiquetas explícitas</li>
+                        <li>Aprendizaje por prueba y error</li>
                         <li>Recompensas retrasadas y escasas</li>
-                        <li>Genera sus propios datos interactuando</li>
-                        <li>Ejemplos: juegos, robótica, control</li>
+                        <li>Genera datos mediante interacción</li>
+                        <li>Ejemplos: Robótica, Juegos, Control</li>
                     </ul>
                 </div>
             </div>
 
             <h3>Procesos de Decisión de Markov (MDPs)</h3>
 
-            <p>Un MDP es una tupla formalizada que modela un problema de decisión secuencial:</p>
+            <p>Un MDP formaliza un problema de decisión secuencial como una tupla de cinco componentes:</p>
 
             <div class="formula">
-                <code>MDP = (S, A, P, R, γ)</code>
+                $$\mathcal{M} = \langle S, A, P, R, \gamma \rangle$$
             </div>
 
             <div class="concept">
                 <ul>
-                    <li><strong>S:</strong> Conjunto de estados (todas las situaciones posibles)</li>
-                    <li><strong>A:</strong> Conjunto de acciones disponibles</li>
-                    <li><strong>P(s'|s,a):</strong> Probabilidad de transición (dinámica del entorno)</li>
-                    <li><strong>R(s,a,s'):</strong> Función de recompensa inmediata</li>
-                    <li><strong>γ ∈ [0,1]:</strong> Factor de descuento (importancia del futuro)</li>
+                    <li>\(\mathbf{S}\): Conjunto de <strong>estados</strong> — todas las configuraciones posibles del entorno</li>
+                    <li>\(\mathbf{A}\): Conjunto de <strong>acciones</strong> disponibles para el agente</li>
+                    <li>\(\mathbf{P}(s' \mid s,a) = \Pr[S_{t+1}=s' \mid S_t=s, A_t=a]\): Dinámica del entorno (probabilidad de transición)</li>
+                    <li>\(\mathbf{R}(s,a,s')\): Función de recompensa inmediata</li>
+                    <li>\(\boldsymbol{\gamma} \in [0,1]\): <strong>Factor de descuento</strong> — importancia relativa de recompensas futuras</li>
                 </ul>
             </div>
 
             <div class="key-point">
-                <strong>Propiedad de Markov:</strong> El futuro depende solo del estado presente, no de toda la historia. Esta es la propiedad fundamental que hace que los MDPs sean manejables computacionalmente.
+                <strong>🔑 Propiedad de Markov:</strong> El futuro depende únicamente del estado presente \(s_t\), no de toda la historia \((s_0, a_0, r_1, \ldots, s_{t-1})\). Esta propiedad fundamental hace que los MDPs sean computacionalmente manejables y permite la programación dinámica.
             </div>
 
-            <h3>Ecuaciones de Bellman</h3>
+            <h3>Ecuaciones de Bellman: La Recursividad del Valor</h3>
 
-            <p>Las ecuaciones de Bellman son relaciones recursivas que descomponen el problema:</p>
+            <p>Las ecuaciones de Bellman descomponen el valor de un estado en la recompensa inmediata más el valor esperado futuro:</p>
 
             <div class="formula">
-                <p><strong>Función de valor de estado:</strong></p>
-                <code>V(s) = Σ_a π(a|s) Σ_{s',r} P(s',r|s,a)[r + γV(s')]</code>
+                $$V^\pi(s) = \mathbb{E}_\pi\left[R_{t+1} + \gamma V^\pi(S_{t+1}) \mid S_t = s\right]$$
+                $$= \sum_a \pi(a \mid s) \sum_{s',r} P(s',r \mid s,a) \left[r + \gamma V^\pi(s')\right]$$
             </div>
+
+            <p style="margin-top: 25px;">Para la función de valor de acción (Q-function):</p>
 
             <div class="formula">
-                <p><strong>Función de valor de acción (Q-function):</strong></p>
-                <code>Q(s,a) = Σ_{s',r} P(s',r|s,a)[r + γ Σ_{a'} π(a'|s')Q(s',a')]</code>
+                $$Q^\pi(s,a) = \mathbb{E}_\pi\left[R_{t+1} + \gamma Q^\pi(S_{t+1}, A_{t+1}) \mid S_t=s, A_t=a\right]$$
             </div>
 
-            <div class="concept">
-                <p>La ecuación de Bellman expresa que el valor de un estado es la recompensa esperada más el valor descontado del siguiente estado. Esto permite resolver el problema de forma iterativa.</p>
+            <div class="info-box">
+                <strong>💡 Importancia:</strong> La ecuación de Bellman permite resolver el problema mediante <strong>iteración</strong>. En lugar de computar todo el futuro, establecemos una relación recursiva entre valores de estados consecutivos.
             </div>
 
-            <h3>Q-Learning (¿Por qué es Off-Policy?)</h3>
+            <h3>Q-Learning: Aprendizaje Off-Policy</h3>
 
-            <p>Q-Learning es un algoritmo que aprende la función Q-value óptima sin necesitar saber cuál es la política óptima durante el aprendizaje.</p>
+            <p>Q-Learning es un algoritmo de aprendizaje por refuerzo que estima la función Q óptima \(Q^*(s,a)\) sin necesidad de conocer la política óptima durante el aprendizaje.</p>
 
             <div class="formula">
-                <p><strong>Actualización de Q-Learning:</strong></p>
-                <code>Q(s,a) ← Q(s,a) + α[r + γ max_{a'} Q(s',a') - Q(s,a)]</code>
+                $$Q(s,a) \leftarrow Q(s,a) + \alpha \left[ r + \gamma \max_{a'} Q(s',a') - Q(s,a) \right]$$
             </div>
 
             <div class="key-point">
-                <strong>¿Por qué es Off-Policy?</strong> Q-Learning es off-policy porque:
-                <ul style="margin-top: 10px;">
-                    <li>Usa una política de exploración (ε-greedy) para elegir acciones</li>
-                    <li>Pero actualiza los Q-values basándose en el máximo Q-value futuro</li>
-                    <li>No necesita que las acciones tomadas sean óptimas para aprender la política óptima</li>
-                    <li>Esto permite balancear exploración vs explotación eficientemente</li>
+                <strong>🎯 ¿Por qué es Off-Policy?</strong>
+                <ul style="margin-top: 15px;">
+                    <li><strong>Política de comportamiento:</strong> El agente sigue una política de <em>exploración</em> (e.g., \(\varepsilon\)-greedy) para generar experiencias</li>
+                    <li><strong>Política objetivo:</strong> Pero actualiza los Q-values basándose en el máximo Q futuro (política greedy)</li>
+                    <li><strong>Desacoplamiento:</strong> Las acciones tomadas y las acciones de las que aprendemos son diferentes</li>
+                    <li><strong>Eficiencia:</strong> Permite balancear exploración vs explotación de manera óptima</li>
                 </ul>
             </div>
 
-            <h3>Problemas de Control vs Predicción</h3>
+            <h3>Problemas de Predicción vs Control</h3>
 
             <table>
                 <thead>
                     <tr>
-                        <th>Aspecto</th>
+                        <th>Dimensión</th>
                         <th>Predicción</th>
                         <th>Control</th>
                     </tr>
@@ -394,94 +640,100 @@
                 <tbody>
                     <tr>
                         <td><strong>Objetivo</strong></td>
-                        <td>Estimar V(s) bajo una política fija π</td>
-                        <td>Encontrar la política óptima π*</td>
+                        <td>Estimar \(V^\pi(s)\) bajo política fija \(\pi\)</td>
+                        <td>Encontrar política óptima \(\pi^*\)</td>
                     </tr>
                     <tr>
                         <td><strong>Política</strong></td>
-                        <td>Dada y fija</td>
-                        <td>Debe ser mejorada iterativamente</td>
+                        <td>Dada y fija (no cambia)</td>
+                        <td>Mejora iterativa mediante greedy sobre Q</td>
                     </tr>
                     <tr>
                         <td><strong>Algoritmos</strong></td>
-                        <td>Monte Carlo, TD(λ), etc.</td>
-                        <td>Q-Learning, Policy Gradient, Actor-Critic</td>
+                        <td>Monte Carlo, TD(\(\lambda\)), Temporal Difference</td>
+                        <td>Q-Learning, SARSA, Policy Gradient, Actor-Critic</td>
                     </tr>
                     <tr>
-                        <td><strong>Desafío</strong></td>
-                        <td>Estimación precisa de valores</td>
-                        <td>Balance exploración/explotación</td>
+                        <td><strong>Desafío Principal</strong></td>
+                        <td>Estimación precisa y eficiente de V</td>
+                        <td>Trade-off exploración/explotación óptimo</td>
                     </tr>
                 </tbody>
             </table>
+
+            <div class="divider"></div>
         </section>
 
-        <!-- SECCIÓN 2: PERCEPTRÓN -->
+        <!-- SECTION 2: PERCEPTRON -->
         <section id="perceptron">
-            <h2>2️⃣ Clasificación Lineal - Perceptrón</h2>
+            <h2><span class="section-number">2</span> Clasificación Lineal: El Perceptrón</h2>
 
-            <h3>Fundamentos del Perceptrón</h3>
+            <h3>Fundamentos: El Clasificador Lineal Más Simple</h3>
 
-            <p>El Perceptrón es el algoritmo más simple de aprendizaje supervisado para clasificación binaria lineal. Aprende un hiperplano que separa dos clases.</p>
+            <p>El Perceptrón, propuesto por Rosenblatt (1958), es el algoritmo de aprendizaje supervizado más simple para clasificación binaria. Aprende un <strong>hiperplano</strong> que separa dos clases en el espacio de características.</p>
 
             <div class="formula">
-                <p><strong>Función de predicción:</strong></p>
-                <code>ŷ = sign(θ·x + θ₀)</code>
+                $$\hat{y} = \text{sign}(\theta \cdot x + \theta_0)$$
             </div>
+
+            <p style="margin-top: 20px;">Donde \(\theta \in \mathbb{R}^d\) es el vector de pesos y \(\theta_0 \in \mathbb{R}\) es el sesgo (bias).</p>
 
             <h3>Algoritmo del Perceptrón y Regla de Actualización</h3>
 
             <div class="concept">
-                <p><strong>Pseudocódigo del Perceptrón:</strong></p>
-                <ol>
-                    <li>Inicializar θ = 0 y θ₀ = 0</li>
-                    <li>Para cada ejemplo (x_i, y_i) en el conjunto de entrenamiento:</li>
-                    <li style="margin-left: 30px;">Si y_i(θ·x_i + θ₀) ≤ 0 (error):
-                        <ul style="margin-top: 5px;">
-                            <li>θ ← θ + y_i x_i</li>
-                            <li>θ₀ ← θ₀ + y_i</li>
+                <p><strong>Idea central:</strong> Actualizar pesos solo cuando hay error de clasificación, moviendo el hiperplano hacia los puntos mal clasificados.</p>
+
+                <div class="formula" style="margin-top: 20px;">
+                    $$\text{Si } y_i(\theta \cdot x_i + \theta_0) \leq 0: \quad \begin{cases}
+                    \theta &\leftarrow \theta + y_i x_i \\
+                    \theta_0 &\leftarrow \theta_0 + y_i
+                    \end{cases}$$
+                </div>
+
+                <p style="margin-top: 20px;"><strong>Pseudocódigo:</strong></p>
+                <ol style="margin-left: 25px;">
+                    <li>Inicializar \(\theta = \mathbf{0}, \theta_0 = 0\)</li>
+                    <li><strong>Repetir hasta convergencia:</strong>
+                        <ul>
+                            <li>Para cada ejemplo \((x_i, y_i)\) con \(y_i \in \{-1, +1\}\):</li>
+                            <li style="margin-left: 20px;">Si \(y_i(\theta \cdot x_i + \theta_0) \leq 0\): actualizar como arriba</li>
                         </ul>
                     </li>
-                    <li>Repetir hasta convergencia</li>
                 </ol>
-            </div>
-
-            <div class="key-point">
-                <strong>Interpretación:</strong> Solo actualizamos cuando hay un error de clasificación. Movemos el hiperplano hacia el punto mal clasificado multiplicando por el signo de la clase (y_i ∈ {-1, +1}).
             </div>
 
             <h3>Teorema de Convergencia de Novikoff</h3>
 
-            <div class="concept">
-                <p><strong>Teorema de Novikoff:</strong> Si el conjunto de datos es <span class="highlight">linealmente separable</span>, el Perceptrón convergerá en un número finito de iteraciones.</p>
+            <div class="key-point">
+                <p><strong>Teorema (Novikoff, 1962):</strong> Si el conjunto de datos es <span class="highlight">linealmente separable</span> con margen \(\gamma > 0\), el Perceptrón convergerá en un número finito de iteraciones.</p>
 
-                <p style="margin-top: 15px;"><strong>Cotas de convergencia:</strong></p>
-                <div class="formula">
-                    <code>Número de errores ≤ (R/γ)²</code>
+                <div class="formula" style="margin-top: 20px;">
+                    $$\text{# errores} \leq \left(\frac{R}{\gamma}\right)^2$$
                 </div>
 
-                <p style="margin-top: 15px;">Donde:</p>
+                <p style="margin-top: 20px;">Donde:</p>
                 <ul>
-                    <li><strong>R:</strong> Máxima norma de los datos ||x_i||</li>
-                    <li><strong>γ:</strong> Margen de separación mínimo</li>
+                    <li>\(R = \max_i \|x_i\|\): máxima norma de los datos</li>
+                    <li>\(\gamma\): margen mínimo de separación (distancia mínima al hiperplano óptimo)</li>
                 </ul>
             </div>
 
-            <div class="key-point">
-                <strong>Limitación importante:</strong> Si los datos NO son linealmente separables, el Perceptrón nunca convergerá. Esta es la razón por la que SVM es superior (introdujo el margen suave).
+            <div class="info-box">
+                <strong>⚠️ Limitación crítica:</strong> El Perceptrón <strong>nunca convergerá</strong> si los datos no son linealmente separables. Esta fue la debilidad fundamental que motivó el desarrollo de SVM con margen suave.
             </div>
 
             <h3>Cálculo Manual: Ejemplo Resuelto</h3>
 
             <div class="example">
-                <p><strong>Problema:</strong> Determinar θ y θ₀ para los siguientes puntos:</p>
+                <p><strong>Problema:</strong> Aplicar el algoritmo del Perceptrón a los puntos:</p>
+
                 <table>
                     <thead>
                         <tr>
                             <th>Punto</th>
-                            <th>x₁</th>
-                            <th>x₂</th>
-                            <th>y</th>
+                            <th>\(x_1\)</th>
+                            <th>\(x_2\)</th>
+                            <th>Label \(y\)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -506,373 +758,372 @@
                     </tbody>
                 </table>
 
-                <p style="margin-top: 20px;"><strong>Solución paso a paso:</strong></p>
-
-                <p><strong>Iteración 1:</strong> θ = [0, 0], θ₀ = 0</p>
+                <p style="margin-top: 25px;"><strong>Iteración 1:</strong> Inicializar \(\theta = [0, 0], \theta_0 = 0\)</p>
                 <ul>
-                    <li>Punto 1 (1, 1, +1): 0·1 + 0·1 + 0 = 0 ≤ 0 → Error</li>
-                    <li>θ ← [0,0] + 1·[1,1] = [1, 1]</li>
-                    <li>θ₀ ← 0 + 1 = 1</li>
+                    <li>Punto 1: \(y_1(\theta \cdot x_1 + \theta_0) = (+1)(0) = 0 \leq 0\) → <strong>Error</strong></li>
+                    <li>Actualizar: \(\theta \leftarrow [0,0] + 1 \cdot [1,1] = [1, 1]\); \(\theta_0 \leftarrow 0 + 1 = 1\)</li>
                 </ul>
 
-                <p><strong>Iteración 2:</strong> θ = [1, 1], θ₀ = 1</p>
+                <p style="margin-top: 15px;"><strong>Iteración 2:</strong> \(\theta = [1, 1], \theta_0 = 1\)</p>
                 <ul>
-                    <li>Punto 1 (1, 1, +1): 1·1 + 1·1 + 1 = 3 > 0 ✓</li>
-                    <li>Punto 2 (2, 2, +1): 1·2 + 1·2 + 1 = 5 > 0 ✓</li>
-                    <li>Punto 3 (0, 0, -1): -1·(0) - 1·(0) + (-1) = -1 ≤ 0 → Error</li>
-                    <li>θ ← [1, 1] + (-1)·[0, 0] = [1, 1]</li>
-                    <li>θ₀ ← 1 + (-1) = 0</li>
+                    <li>Punto 1: \((+1)(1 \cdot 1 + 1 \cdot 1 + 1) = 3 > 0\) → ✓</li>
+                    <li>Punto 2: \((+1)(1 \cdot 2 + 1 \cdot 2 + 1) = 5 > 0\) → ✓</li>
+                    <li>Punto 3: \((-1)(1 \cdot 0 + 1 \cdot 0 + 1) = -1 \leq 0\) → <strong>Error</strong></li>
+                    <li>Actualizar: \(\theta \leftarrow [1, 1] + (-1) \cdot [0, 0] = [1, 1]\); \(\theta_0 \leftarrow 1 - 1 = 0\)</li>
                 </ul>
 
-                <p><strong>Iteración 3:</strong> Todos los puntos clasificados correctamente</p>
+                <p style="margin-top: 15px;"><strong>Iteración 3:</strong> \(\theta = [1, 1], \theta_0 = 0\)</p>
+                <ul>
+                    <li>Todos los puntos se clasifican correctamente → <strong>Convergencia</strong></li>
+                </ul>
 
-                <div class="formula" style="margin-top: 20px;">
-                    <p><strong>Resultado Final:</strong></p>
-                    <code>θ = [4, 4], θ₀ = -18</code>
-                    <p style="margin-top: 10px; font-size: 0.95em;">o θ = (4, 4), θ₀ = -18</p>
+                <div class="formula" style="margin-top: 25px;">
+                    $$\boxed{\theta = (1, 1), \quad \theta_0 = 0}$$
+                </div>
+
+                <div class="info-box" style="margin-top: 20px;">
+                    <strong>Nota:</strong> El resultado final depende del orden de presentación de los puntos. Diferentes órdenes pueden producir diferentes hiperplanos válidos, todos ellos separando correctamente los datos.
                 </div>
             </div>
 
             <h3>Dependencia del Orden de los Puntos</h3>
 
             <div class="key-point">
-                <strong>Orden Importa:</strong> El Perceptrón es sensible al orden en que se presentan los ejemplos de entrenamiento. Diferentes órdenes pueden resultar en:
-                <ul style="margin-top: 10px;">
-                    <li>Diferentes pesos finales θ</li>
-                    <li>Diferentes números de iteraciones hasta convergencia</li>
-                    <li>Hiperplanos diferentes (todos válidos si los datos son linealmente separables)</li>
+                <strong>📌 El Perceptrón es sensible al orden:</strong> El orden en que se presentan los ejemplos afecta:
+                <ul style="margin-top: 15px;">
+                    <li>Los pesos finales \(\theta\) y \(\theta_0\) (aunque todos sean válidos si hay separación)</li>
+                    <li>El número de iteraciones hasta convergencia</li>
+                    <li>La orientación y posición final del hiperplano</li>
                 </ul>
+
+                <p style="margin-top: 15px;"><strong>Implicación práctica:</strong> Para reproducibilidad, usar aleatorización con semilla fija (seed) o presentar los datos en orden determinístico.</p>
             </div>
 
-            <div class="example">
-                <p><strong>Implicación:</strong> Para resultados reproducibles, es buena práctica usar un orden fijo o aleatorio con semilla (seed) controlada.</p>
-            </div>
+            <div class="divider"></div>
         </section>
 
-        <!-- SECCIÓN 3: SVM -->
+        <!-- SECTION 3: SVM -->
         <section id="svm">
-            <h2>3️⃣ SVM - Máquinas de Vectores de Soporte</h2>
+            <h2><span class="section-number">3</span> Máquinas de Vectores de Soporte: Margen Máximo</h2>
 
-            <h3>¿Por qué SVM es mejor que Perceptrón?</h3>
+            <h3>Motivación: Más Allá del Perceptrón</h3>
 
-            <p>Mientras que el Perceptrón solo busca un hiperplano que separe los datos, <span class="highlight">SVM busca el hiperplano con el MÁXIMO MARGEN</span>. Esto proporciona mejor generalización y manejo de datos no linealmente separables.</p>
+            <p>Mientras que el Perceptrón busca <em>cualquier</em> hiperplano que separe los datos, SVM busca el hiperplano <strong>óptimo</strong> — el que maximiza el margen, la distancia mínima a los puntos más cercanos.</p>
+
+            <div class="concept">
+                <p><strong>Intuición:</strong> Un margen mayor implica mejor <em>capacidad de generalización</em>. El hiperplano está "más lejos" de los datos, haciendo el modelo más robusto a variaciones.</p>
+            </div>
 
             <h3>Formulación del Margen Máximo</h3>
 
-            <div class="concept">
-                <p><strong>Margen:</strong> Es la distancia más pequeña entre el hiperplano de decisión y los puntos de entrenamiento más cercanos.</p>
-            </div>
+            <p>El margen geométrico es la distancia perpendicular más pequeña entre el hiperplano y cualquier punto de entrenamiento:</p>
 
             <div class="formula">
-                <p><strong>Margen geométrico:</strong></p>
-                <code>Margen = 2 / ||θ||</code>
+                $$\text{Margen} = \frac{1}{\|\theta\|}$$
             </div>
 
-            <p>SVM resuelve el siguiente problema de optimización:</p>
+            <p style="margin-top: 20px;">SVM resuelve el problema de optimización (margen duro):</p>
 
             <div class="formula">
-                <p><strong>Problema primal (margen duro):</strong></p>
-                <code>min 1/2 ||θ||²<br>s.t. y_i(θ·x_i + θ₀) ≥ 1 ∀i</code>
+                $$\min_{\theta, \theta_0} \quad \frac{1}{2}\|\theta\|^2$$
+                $$\text{sujeto a} \quad y_i(\theta \cdot x_i + \theta_0) \geq 1 \quad \forall i = 1, \ldots, m$$
             </div>
 
             <div class="key-point">
-                <strong>Interpretación:</strong>
-                <ul style="margin-top: 10px;">
-                    <li>Minimizamos ||θ|| para maximizar el margen</li>
-                    <li>Cada punto debe estar al menos a distancia 1 del hiperplano</li>
-                    <li>Esto es un problema convexo con solución única</li>
+                <strong>¿Por qué \(\frac{1}{2}\|\theta\|^2\) en lugar de \(\|\theta\|\)?</strong>
+                <ul style="margin-top: 15px;">
+                    <li>Matemáticamente equivalente pero convexo y diferenciable</li>
+                    <li>El factor \(\frac{1}{2}\) simplifica derivadas</li>
+                    <li>Permite usar programación cuadrática</li>
                 </ul>
             </div>
 
-            <h3>Vectores de Soporte</h3>
+            <h3>Vectores de Soporte y KKT</h3>
 
             <div class="concept">
-                <p><strong>Vectores de Soporte:</strong> Son los puntos de entrenamiento más cercanos al hiperplano que determinan el margen. Cumplen la condición:</p>
-                <div class="formula" style="margin-top: 10px;">
-                    <code>y_i(θ·x_i + θ₀) = 1</code>
+                <p><strong>Vectores de Soporte:</strong> Son los puntos de entrenamiento que definen el margen. Cumplen la condición:</p>
+
+                <div class="formula" style="margin-top: 15px;">
+                    $$y_i(\theta \cdot x_i + \theta_0) = 1$$
                 </div>
 
-                <p style="margin-top: 15px;"><strong>Características importantes:</strong></p>
-                <ul>
-                    <li>Típicamente son el 10-30% de los datos</li>
-                    <li>Los demás puntos pueden moverse sin cambiar la solución</li>
-                    <li>La solución depende únicamente de los vectores de soporte</li>
-                    <li>Esto hace SVM eficiente y robusto</li>
+                <p style="margin-top: 15px;"><strong>Propiedad fundamental:</strong> Típicamente solo 10-30% de los datos son vectores de soporte. Los demás puntos pueden moverse sin cambiar la solución. Esto hace SVM extremadamente eficiente.</p>
+            </div>
+
+            <h3>Hinge Loss: Permitiendo Errores</h3>
+
+            <p>El problema de margen duro asume separabilidad lineal perfecta. En datos reales, necesitamos permitir violaciones. Introducimos las <strong>variables de holgura</strong> \(\xi_i \geq 0\):</p>
+
+            <div class="formula">
+                $$\min_{\theta, \theta_0, \xi} \quad \frac{1}{2}\|\theta\|^2 + C\sum_{i=1}^m \xi_i$$
+                $$\text{s.t.} \quad y_i(\theta \cdot x_i + \theta_0) \geq 1 - \xi_i, \quad \xi_i \geq 0$$
+            </div>
+
+            <p style="margin-top: 20px;">Equivalentemente, usando Hinge Loss:</p>
+
+            <div class="formula">
+                $$L_{\text{hinge}}(y, \hat{y}) = \max(0, 1 - y \cdot \hat{y})$$
+            </div>
+
+            <div class="info-box">
+                <strong>Interpretación de \(C\):</strong>
+                <ul style="margin-top: 10px;">
+                    <li>\(C\) pequeño: Margen más amplio, tolera más errores (underfitting)</li>
+                    <li>\(C\) grande: Penaliza más los errores, margen más estrecho (overfitting)</li>
+                    <li>\(C \to \infty\): Margen duro (separabilidad perfecta)</li>
                 </ul>
             </div>
 
-            <h3>Hinge Loss</h3>
+            <h3>Formulación Dual y Condiciones KKT</h3>
 
-            <div class="concept">
-                <p><strong>Hinge Loss:</strong> Función de pérdida que permite violaciones suaves del margen (margen suave).</p>
-            </div>
+            <p>El problema dual es más fácil de resolver numéricamente y revela la estructura del problema:</p>
 
             <div class="formula">
-                <code>L(y, ŷ) = max(0, 1 - y·ŷ)</code>
+                $$\max_{\alpha} \quad \sum_{i=1}^m \alpha_i - \frac{1}{2}\sum_{i,j} \alpha_i \alpha_j y_i y_j (x_i \cdot x_j)$$
+                $$\text{s.t.} \quad 0 \leq \alpha_i \leq C, \quad \sum_{i=1}^m \alpha_i y_i = 0$$
             </div>
 
-            <div class="concept">
-                <ul>
-                    <li>Si y·ŷ ≥ 1: Loss = 0 (clasificación correcta con margen)</li>
-                    <li>Si y·ŷ < 1: Loss = 1 - y·ŷ > 0 (penaliza errores)</li>
-                    <li>Permite puntos dentro del margen o mal clasificados</li>
-                </ul>
-            </div>
-
-            <p style="margin-top: 20px;">El problema de SVM con margen suave es:</p>
+            <p style="margin-top: 20px;"><strong>Condiciones KKT (Karush-Kuhn-Tucker):</strong></p>
 
             <div class="formula">
-                <p><strong>Problema con regularización:</strong></p>
-                <code>min 1/2 ||θ||² + C Σᵢ ξᵢ<br>s.t. y_i(θ·x_i + θ₀) ≥ 1 - ξᵢ<br>     ξᵢ ≥ 0 ∀i</code>
+                $$\alpha_i [y_i(\theta \cdot x_i + \theta_0) - 1 + \xi_i] = 0$$
+                $$(C - \alpha_i)\xi_i = 0$$
             </div>
 
-            <div class="concept">
-                <ul>
-                    <li><strong>C:</strong> Hiperparámetro de regularización</li>
-                    <li><strong>ξᵢ:</strong> Variables de holgura (slack variables)</li>
-                    <li><strong>C grande:</strong> Penaliza errores más (margen duro)</li>
-                    <li><strong>C pequeño:</strong> Permite más errores (margen suave)</li>
-                </ul>
+            <div class="key-point">
+                <strong>🔑 Interpretación crucial:</strong> Si \(\alpha_i > 0\), entonces \(x_i\) es un vector de soporte. Estos son los únicos puntos que importan para la solución final. Todos los demás puntos pueden cambiar sin afectar el modelo.
             </div>
 
-            <h3>Dual de Lagrange y Condiciones KKT</h3>
-
-            <p>El problema dual es más fácil de resolver numéricamente:</p>
-
-            <div class="formula">
-                <p><strong>Problema Dual:</strong></p>
-                <code>max Σᵢ αᵢ - 1/2 Σᵢⱼ αᵢαⱼyᵢyⱼ(xᵢ·xⱼ)<br>s.t. 0 ≤ αᵢ ≤ C ∀i<br>     Σᵢ αᵢyᵢ = 0</code>
-            </div>
-
-            <div class="concept">
-                <p><strong>Condiciones KKT (Karush-Kuhn-Tucker):</strong> Condiciones que caracterizan la solución óptima:</p>
-                <ol style="margin-top: 10px;">
-                    <li>αᵢ(y_i(θ·x_i + θ₀) - 1 + ξᵢ) = 0 (complementariedad)</li>
-                    <li>(C - αᵢ)ξᵢ = 0 (complementariedad 2)</li>
-                    <li>αᵢ ≥ 0, y_i(θ·x_i + θ₀) - 1 + ξᵢ ≥ 0</li>
-                </ol>
-
-                <p style="margin-top: 15px;"><strong>Implicación importante:</strong> Si αᵢ > 0, entonces x_i es vector de soporte (solo estos importan).</p>
-            </div>
-
-            <h3>Propiedades Importantes de SVM</h3>
+            <h3>Propiedades Teóricas de SVM</h3>
 
             <table>
                 <thead>
                     <tr>
                         <th>Propiedad</th>
                         <th>Verdadero/Falso</th>
-                        <th>Explicación</th>
+                        <th>Justificación</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>SVM es convexo</td>
+                        <td>El problema primal es convexo</td>
                         <td>✓ <strong>Verdadero</strong></td>
-                        <td>Tiene un único mínimo global</td>
+                        <td>Función cuadrática convexa + restricciones lineales = problema convexo con mínimo único</td>
                     </tr>
                     <tr>
-                        <td>SVM requiere datos normalizados</td>
+                        <td>SVM requiere normalización de datos</td>
                         <td>✓ <strong>Verdadero</strong></td>
-                        <td>Por el parámetro C que controla el margen</td>
+                        <td>\(C\) controla el margen en términos de las normas de los datos</td>
                     </tr>
                     <tr>
                         <td>Todos los datos son vectores de soporte</td>
                         <td>✗ <strong>Falso</strong></td>
-                        <td>Típicamente solo 10-30% son vectores de soporte</td>
+                        <td>Típicamente \(|\text{SV}| \ll m\); solo puntos cercanos al margen importan</td>
                     </tr>
                     <tr>
-                        <td>SVM puede resolver problemas no lineales</td>
-                        <td>✓ <strong>Verdadero</strong></td>
-                        <td>Usando kernels (próxima sección)</td>
+                        <td>SVM solo funciona para lineales</td>
+                        <td>✗ <strong>Falso</strong></td>
+                        <td>Con kernels, puede resolver problemas altamente no-lineales (siguiente sección)</td>
                     </tr>
                     <tr>
-                        <td>C→∞ corresponde a margen duro</td>
+                        <td>Si \(C \to \infty\), obtenemos margen duro</td>
                         <td>✓ <strong>Verdadero</strong></td>
-                        <td>No permite violaciones del margen</td>
+                        <td>Penalización infinita de errores fuerza \(\xi_i = 0\)</td>
                     </tr>
                 </tbody>
             </table>
+
+            <div class="divider"></div>
         </section>
 
-        <!-- SECCIÓN 4: KERNELS -->
+        <!-- SECTION 4: KERNELS -->
         <section id="kernels">
-            <h2>4️⃣ Kernels y el Truco del Kernel</h2>
+            <h2><span class="section-number">4</span> Kernels: El Truco para No-Linealidad</h2>
 
-            <h3>Mapeo a Espacios de Mayor Dimensión</h3>
+            <h3>El Problema: No-Linealidad en Datos Reales</h3>
 
-            <p>El "truco del kernel" permite a SVM resolver problemas <strong>no lineales</strong> sin mapear explícitamente a espacios de altísima dimensión.</p>
-
-            <div class="concept">
-                <p><strong>Idea Fundamental:</strong></p>
-                <ol>
-                    <li>Los datos no linealmente separables en bajo dimensión pueden serlo en alto dimensión</li>
-                    <li>Mapear datos: x → φ(x) (donde φ es muy costoso)</li>
-                    <li>El "truco": usar kernel K(x_i, x_j) = φ(x_i)·φ(x_j)</li>
-                    <li>Resultado: Obtenemos el beneficio del espacio alto sin computar φ explícitamente</li>
-                </ol>
-            </div>
+            <p>Los datos reales raramente son separables linealmente. Una aproximación ingenua es mapearlos a un espacio de dimensión mucho mayor donde sean separables:</p>
 
             <div class="formula">
-                <p><strong>Formulación dual con kernel:</strong></p>
-                <code>max Σᵢ αᵢ - 1/2 Σᵢⱼ αᵢαⱼyᵢyⱼ K(xᵢ,xⱼ)</code>
+                $$x \mapsto \phi(x) \in \mathbb{R}^D, \quad D \gg d$$
             </div>
 
-            <h3>Tipos de Kernels</h3>
+            <p style="margin-top: 15px;">El problema: Si \(D\) es muy grande, \(\phi(x) \cdot \phi(x')\) es computacionalmente costoso.</p>
 
-            <h4>Kernel Polinomial</h4>
+            <div class="key-point">
+                <strong>💡 El Truco del Kernel:</strong> Definir un kernel \(K(x, x') = \phi(x) \cdot \phi(x')\) que computa el producto interno <em>sin calcular explícitamente</em> \(\phi(x)\).
+            </div>
+
+            <h3>Kernels Polinomiales</h3>
+
+            <p>El kernel polinomial de grado \(d\) realiza un mapeo implícito a un espacio polinomial:</p>
 
             <div class="formula">
-                <p><strong>Kernel Polinomial de grado d:</strong></p>
-                <code>K(x, x') = (x·x' + c)^d</code>
+                $$K(x, x'; d) = (x \cdot x' + c)^d$$
             </div>
 
-            <div class="concept">
-                <p><strong>Ejemplos comunes:</strong></p>
-                <ul>
-                    <li><span class="highlight">K1:</span> K(x, x') = (x·x' + 1)² → mapeo cuadrático</li>
-                    <li><span class="highlight">K2:</span> K(x, x') = (x·x' + 0)² = (x·x')² → productos internos cuadrados</li>
-                    <li><span class="highlight">K3:</span> K(x, x') = (x·x' + 1)³ → mapeo cúbico</li>
-                </ul>
-
-                <p style="margin-top: 15px;"><strong>Interpretación:</strong> Mayor grado d = mayor complejidad del clasificador = más capacidad pero más riesgo de overfitting.</p>
-            </div>
-
-            <h4>Kernel RBF (Gaussiano)</h4>
-
-            <div class="formula">
-                <p><strong>Kernel RBF (Radial Basis Function):</strong></p>
-                <code>K(x, x') = exp(-γ ||x - x'||²)<br>o equivalentemente<br>K(x, x') = exp(-||x - x'||² / (2σ²))</code>
-            </div>
+            <p style="margin-top: 20px;"><strong>Ejemplos comunes:</strong></p>
 
             <div class="concept">
                 <ul>
-                    <li><strong>γ o σ:</strong> Parámetro de ancho del kernel</li>
-                    <li><strong>γ pequeño (σ grande):</strong> Kernel suave, bajo margen (puede underfitting)</li>
-                    <li><strong>γ grande (σ pequeño):</strong> Kernel afilado, alto margen (puede overfitting)</li>
-                    <li><strong>Mapeo implícito:</strong> A espacio infinito-dimensional</li>
-                    <li><strong>Más flexible:</strong> Puede resolver casi cualquier problema no lineal</li>
+                    <li><span class="highlight">Kernel \(K_1\):</span> \(K(x, x') = (x \cdot x' + 1)^2\) — grado 2 con sesgo</li>
+                    <li><span class="highlight">Kernel \(K_2\):</span> \(K(x, x') = (x \cdot x')^2\) — grado 2 sin sesgo, productos puros</li>
+                    <li><span class="highlight">Kernel \(K_3\):</span> \(K(x, x') = (x \cdot x' + 1)^3\) — grado 3, más complejo</li>
+                </ul>
+
+                <p style="margin-top: 15px;"><strong>Interpretación:</strong></p>
+                <ul>
+                    <li>Mayor grado \(d\) = mayor flexibilidad = riesgo de overfitting</li>
+                    <li>El parámetro \(c\) ajusta la importancia de términos de bajo grado</li>
+                    <li>Kernel polinomial produce límites de decisión curvos (cónicas, parábolas)</li>
                 </ul>
             </div>
 
-            <h3>Margen Suave vs Margen Duro</h3>
+            <h3>Kernel RBF (Gaussiano)</h3>
+
+            <p>El kernel RBF (Radial Basis Function) es el más versátil, mapeando implícitamente a un espacio infinito-dimensional:</p>
+
+            <div class="formula">
+                $$K(x, x'; \gamma) = \exp\left(-\gamma \|x - x'\|^2\right)$$
+            </div>
+
+            <p style="margin-top: 20px;">De forma equivalente:</p>
+
+            <div class="formula">
+                $$K(x, x'; \sigma) = \exp\left(-\frac{\|x - x'\|^2}{2\sigma^2}\right)$$
+            </div>
+
+            <div class="concept">
+                <p style="margin-top: 15px;"><strong>Parámetro \(\gamma\) (o \(\sigma\)):</strong></p>
+                <ul>
+                    <li>\(\gamma\) pequeño (σ grande): Kernel suave, baja "rugosidad", generaliza mejor</li>
+                    <li>\(\gamma\) grande (σ pequeño): Kernel afilado, "sigue" los datos, riesgo de overfitting</li>
+                    <li>Valores típicos: \(\gamma \in [10^{-6}, 1]\)</li>
+                </ul>
+
+                <p style="margin-top: 15px;"><strong>Ventajas de RBF:</strong></p>
+                <ul>
+                    <li>✓ Puede aproximar casi cualquier función continua</li>
+                    <li>✓ Flexible para datos altamente no-lineales</li>
+                    <li>✓ Solo un parámetro a ajustar (\(\gamma\))</li>
+                    <li>✗ Puede overfitear si \(\gamma\) es muy grande</li>
+                </ul>
+            </div>
+
+            <h3>Margen Suave (\(C_1\)) vs Margen Duro (\(C_2\))</h3>
 
             <table>
                 <thead>
                     <tr>
                         <th>Aspecto</th>
-                        <th>Margen Duro (C → ∞)</th>
-                        <th>Margen Suave (C finito)</th>
+                        <th>Margen Duro (\(C_2 \to \infty\))</th>
+                        <th>Margen Suave (\(C_1\) finito)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td><strong>Restricción</strong></td>
-                        <td>y_i(θ·x_i + θ₀) ≥ 1 (exacta)</td>
-                        <td>y_i(θ·x_i + θ₀) ≥ 1 - ξᵢ (relajada)</td>
+                        <td>\(y_i(\theta \cdot x_i + \theta_0) \geq 1\) (exacta)</td>
+                        <td>\(y_i(\theta \cdot x_i + \theta_0) \geq 1 - \xi_i\) (relajada)</td>
                     </tr>
                     <tr>
-                        <td><strong>Datos</strong></td>
-                        <td>Debe ser linealmente separable</td>
-                        <td>Tolera datos ruidosos o outliers</td>
+                        <td><strong>Requiere</strong></td>
+                        <td>Datos perfectamente separables</td>
+                        <td>Tolera puntos ruidosos o outliers</td>
                     </tr>
                     <tr>
-                        <td><strong>Sesgo</strong></td>
-                        <td>Alto (menos flexible)</td>
-                        <td>Bajo (más flexible)</td>
+                        <td><strong>Margen</strong></td>
+                        <td>Muy estrecho (pasa entre puntos)</td>
+                        <td>Más amplio (sacrifica algunos puntos)</td>
                     </tr>
                     <tr>
-                        <td><strong>Varianza</strong></td>
-                        <td>Baja (generaliza bien)</td>
-                        <td>Puede ser alta si C es muy grande</td>
+                        <td><strong>Generalización</strong></td>
+                        <td>Pobre en datos ruidosos</td>
+                        <td>Mejor en problemas reales</td>
                     </tr>
                     <tr>
                         <td><strong>Uso</strong></td>
-                        <td>Datos perfectamente separables (raro)</td>
-                        <td>Datos reales (lo usual)</td>
+                        <td>Raramente (datos ideales)</td>
+                        <td>Estándar en práctica</td>
                     </tr>
                 </tbody>
             </table>
 
-            <h3>Identificación de Kernel por Gráfica</h3>
+            <h3>Identificación de Kernels por Gráfica</h3>
 
-            <div class="concept">
-                <p><strong>Claves para identificar kernels:</strong></p>
-
-                <ul style="margin-top: 15px;">
-                    <li><strong>Límites lineales rectos:</strong> Kernel lineal (K = x·x')</li>
-                    <li><strong>Límites con curvas suaves:</strong> Kernel polinomial o RBF</li>
-                    <li><strong>Límites muy curvos/complejos:</strong> RBF con γ grande</li>
-                    <li><strong>Límites overfiteados (muchas curvas):</strong> Kernel muy complejo o C muy grande</li>
-                    <li><strong>Margen más estrecho:</strong> C más grande (penaliza más errores)</li>
-                    <li><strong>Margen más ancho:</strong> C más pequeño (tolera más errores)</li>
-                </ul>
-            </div>
-
-            <div class="example">
-                <p><strong>Ejemplo Visual:</strong></p>
+            <div class="info-box">
+                <strong>📊 Cómo reconocer qué kernel se usó:</strong>
                 <ul>
-                    <li>Si ves círculos o elipses como límites → Kernel polinomial bajo grado</li>
-                    <li>Si ves límites muy irregulares → Kernel RBF o polinomial alto grado</li>
-                    <li>Si ves líneas rectas → Kernel lineal (o SVM sin kernel)</li>
+                    <li><strong>Límites rectos:</strong> Kernel lineal \(K(x,x') = x \cdot x'\)</li>
+                    <li><strong>Elipses/círculos simples:</strong> Kernel polinomial bajo grado (K1, K2)</li>
+                    <li><strong>Límites suavemente curvos:</strong> Kernel polinomial grado 3+ o RBF con \(\gamma\) moderado</li>
+                    <li><strong>Límites muy complejos/irregulares:</strong> RBF con \(\gamma\) grande o kernel polinomial muy alto grado</li>
+                    <li><strong>Margen muy estrecho:</strong> \(C\) muy grande o \(\gamma\) muy grande (overfitting)</li>
+                    <li><strong>Margen más amplio/simple:</strong> \(C\) más pequeño o kernel menos flexible</li>
                 </ul>
             </div>
+
+            <div class="divider"></div>
         </section>
 
-        <!-- SECCIÓN 5: DEEP LEARNING -->
+        <!-- SECTION 5: DEEP LEARNING -->
         <section id="deep">
-            <h2>5️⃣ Aprendizaje Profundo y Redes Neuronales</h2>
+            <h2><span class="section-number">5</span> Aprendizaje Profundo: Redes Neuronales Modernas</h2>
 
             <h3>Maldición de la Dimensionalidad</h3>
 
-            <div class="concept">
-                <p><strong>Maldición de la Dimensionalidad:</strong> Fenómeno donde el volumen del espacio crece exponencialmente con la dimensión, haciendo que los datos se vuelvan dispersos.</p>
+            <p>Un fenómeno crítico en aprendizaje automático: a medida que aumenta la dimensión, el espacio crece exponencialmente, haciendo que los datos se vuelvan dispersos.</p>
 
-                <p style="margin-top: 15px;"><strong>Consecuencias:</strong></p>
+            <div class="formula">
+                $$\text{Volumen}([-1,1]^d) = 2^d$$
+            </div>
+
+            <div class="concept">
+                <p style="margin-top: 15px;"><strong>Consecuencias catastróficas:</strong></p>
                 <ul>
-                    <li>Necesitamos exponencialmente más datos para mantener densidad</li>
-                    <li>Las distancias entre puntos se vuelven menos significativas</li>
-                    <li>Los datos caen principalmente en los bordes del espacio</li>
-                    <li>Métodos como k-NN y clustering se vuelven inefectivos</li>
+                    <li>Necesitamos exponencialmente más datos para mantener densidad: si en \(d=1\) necesitamos 10 puntos/unidad, en \(d=100\) necesitamos \(10^{100}\) puntos totales</li>
+                    <li>Las distancias entre puntos aleatorios se vuelven más uniformes (pierden significado)</li>
+                    <li>La mayoría de los datos caen en los bordes del hipercubo</li>
+                    <li>Métodos como k-NN y clustering colapsan</li>
                 </ul>
 
-                <div class="formula" style="margin-top: 15px;">
-                    <p><strong>Ejemplo numérico:</strong></p>
-                    <code>Dimensión 1: Rango [0,1], 10 puntos por unidad = 10 puntos<br>
-                    Dimensión 2: Cuadrado [0,1]², 10x10 cuadrícula = 100 puntos<br>
-                    Dimensión 10: Hipercubo, 10¹⁰ puntos necesarios!<br>
-                    Dimensión 100: 10¹⁰⁰ puntos (más que átomos en universo)</code>
+                <div class="formula" style="margin-top: 20px;">
+                    $$\text{Ejemplo numérico: Para mantener} \approx 1 \text{ punto por hiper-volumen:}$$
+                    $$d=1: \text{10 puntos}, \quad d=10: 10^{10} \text{ puntos}, \quad d=100: 10^{100} \text{ puntos}$$
                 </div>
             </div>
 
             <div class="key-point">
-                <strong>Solución: Deep Learning</strong>
-                <ul style="margin-top: 10px;">
-                    <li>Aprende representaciones de menor dimensión (embeddings)</li>
+                <strong>🔑 Solución: Aprendizaje Profundo</strong>
+                <ul style="margin-top: 15px;">
+                    <li>Aprender representaciones latentes en espacios de baja dimensión</li>
                     <li>Cada capa extrae características cada vez más abstractas</li>
                     <li>Reduce efectivamente la dimensionalidad del problema</li>
                 </ul>
             </div>
 
-            <h3>Funciones de Regresión y MSE</h3>
+            <h3>Función de Regresión y MSE</h3>
 
-            <div class="concept">
-                <p><strong>Función de Regresión:</strong> Mapea entrada x a valor continuo ŷ.</p>
+            <p>Una red neuronal profunda es una composición de capas no-lineales:</p>
 
-                <div class="formula" style="margin-top: 15px;">
-                    <code>ŷ = f(x; θ) = w_n^T σ(w_{n-1}^T σ(...σ(w_1^T x + b_1)...))</code>
-                </div>
+            <div class="formula">
+                $$\hat{y} = f(x; \theta) = W_\ell \sigma(W_{\ell-1} \sigma(\cdots \sigma(W_1 x + b_1) \cdots) + b_{\ell-1}) + b_\ell$$
+            </div>
 
-                <p style="margin-top: 15px;"><strong>MSE (Mean Squared Error):</strong> Función de pérdida para regresión.</p>
+            <p style="margin-top: 15px;">Donde \(\sigma(\cdot)\) es una función de activación no-lineal (e.g., ReLU).</p>
 
-                <div class="formula" style="margin-top: 10px;">
-                    <code>MSE = 1/m Σᵢ (yᵢ - ŷᵢ)²</code>
-                </div>
+            <p style="margin-top: 15px;"><strong>Error cuadrático medio (MSE):</strong> Función de pérdida estándar para regresión:</p>
 
-                <ul style="margin-top: 15px;">
-                    <li>Penaliza errores grandes más que errores pequeños (cuadrado)</li>
-                    <li>Derivable, útil para descenso de gradiente</li>
+            <div class="formula">
+                $$\mathcal{L}_{\text{MSE}} = \frac{1}{m}\sum_{i=1}^m (y_i - \hat{y}_i)^2$$
+            </div>
+
+            <div class="info-box">
+                <ul>
+                    <li>Penaliza errores grandes más que pequeños (cuadrado)</li>
+                    <li>Derivable → útil para descenso de gradiente</li>
                     <li>Sensible a outliers (por el cuadrado)</li>
+                    <li>Alternativa robusta: MAE \(= \frac{1}{m}\sum_i |y_i - \hat{y}_i|\)</li>
                 </ul>
             </div>
 
@@ -881,200 +1132,185 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Aspecto</th>
+                        <th>Dimensión</th>
                         <th>Shallow (1-2 capas)</th>
-                        <th>Deep (3+ capas)</th>
+                        <th>Deep (5+ capas)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Capacidad</strong></td>
-                        <td>Limitada a features lineales/simples</td>
+                        <td><strong>Capacidad de Representación</strong></td>
+                        <td>Limitada a features casi-lineales/simples</td>
                         <td>Puede aprender features complejas y jerárquicas</td>
                     </tr>
                     <tr>
-                        <td><strong>Datos necesarios</strong></td>
-                        <td>Menos datos (simple)</td>
-                        <td>Más datos (pero sigue siendo mejor con big data)</td>
+                        <td><strong>Datos Necesarios</strong></td>
+                        <td>Menos datos (modelo simple)</td>
+                        <td>Muchos datos (pero escalabilidad mejor)</td>
                     </tr>
                     <tr>
-                        <td><strong>Tiempo de entrenamiento</strong></td>
-                        <td>Rápido</td>
-                        <td>Puede ser lento (necesita GPUs)</td>
+                        <td><strong>Tiempo de Entrenamiento</strong></td>
+                        <td>Rápido (CPU suficiente)</td>
+                        <td>Lento (requiere GPU/TPU)</td>
                     </tr>
                     <tr>
-                        <td><strong>Problemas resueltos</strong></td>
-                        <td>Datos tabulares simples</td>
-                        <td>Imágenes, lenguaje natural, audio, etc.</td>
+                        <td><strong>Problemas Resueltos</strong></td>
+                        <td>Datos tabulares simples, problemas clásicos</td>
+                        <td>Visión, Lenguaje, Audio, Control</td>
                     </tr>
                     <tr>
                         <td><strong>Interpretabilidad</strong></td>
-                        <td>Alta (puedes entender cada peso)</td>
-                        <td>Baja (cajas negras)</td>
+                        <td>Alta (pesos más interpretables)</td>
+                        <td>Baja ("cajas negras")</td>
                     </tr>
                 </tbody>
             </table>
 
-            <h3>SGD - Descenso de Gradiente Estocástico</h3>
+            <h3>SGD: Descenso de Gradiente Estocástico</h3>
+
+            <p>Batch GD computa gradientes sobre todo el dataset, que es lento para datos grandes. SGD actualiza con mini-batches:</p>
+
+            <div class="formula">
+                $$\theta \leftarrow \theta - \alpha \nabla \mathcal{L}(\theta; \text{batch})$$
+            </div>
 
             <div class="concept">
-                <p><strong>SGD:</strong> Variante de optimización que actualiza pesos usando mini-batches en lugar de todo el dataset.</p>
-
-                <div class="formula" style="margin-top: 15px;">
-                    <p><strong>Actualización SGD:</strong></p>
-                    <code>θ ← θ - α ∇L(θ; batch)</code>
-                </div>
-
-                <p style="margin-top: 15px;"><strong>Comparación de métodos:</strong></p>
+                <p style="margin-top: 15px;"><strong>Variantes:</strong></p>
                 <ul>
-                    <li><strong>Batch Gradient Descent:</strong> Usa todo dataset → lento pero estable</li>
+                    <li><strong>Batch GD:</strong> Todo el dataset → lento pero estable</li>
                     <li><strong>Stochastic GD:</strong> Un punto → rápido pero ruidoso</li>
-                    <li><strong>Mini-batch SGD:</strong> Balance: rápido, estable y eficiente</li>
+                    <li><strong>Mini-batch SGD:</strong> \(32-512\) puntos → balance óptimo</li>
                 </ul>
 
                 <p style="margin-top: 15px;"><strong>Ventajas de SGD:</strong></p>
                 <ul>
-                    <li>✓ Escala a datasets enormes</li>
+                    <li>✓ Escala a datasets de miles de millones</li>
                     <li>✓ Convergencia más rápida en práctica</li>
-                    <li>✓ Puede escapar mínimos locales (por ruido)</li>
-                    <li>✓ Usa menos memoria (no todo dataset en RAM)</li>
+                    <li>✓ Ruido ayuda a escapar mínimos locales</li>
+                    <li>✓ Memoria constante (no carga todo el dataset)</li>
+                    <li>✓ Permite aprendizaje online (continuo)</li>
                 </ul>
             </div>
 
-            <h3>Silver y Sutton - "Era de la Experiencia"</h3>
+            <h3>Silver & Sutton: "Era de la Experiencia"</h3>
 
             <div class="key-point">
-                <p><strong>Concepto Clave (Silver & Sutton):</strong> Estamos en la "Era de la Experiencia" donde:</p>
+                <p><strong>📖 Paradigma de Silver & Sutton (AlphaGo, AlphaStar):</strong> Estamos en la "Era de la Experiencia" donde:</p>
 
+                <div class="formula" style="margin-top: 20px;">
+                    $$\text{Rendimiento} \propto \text{Escala de datos} \times \text{Escala de compute}$$
+                </div>
+
+                <p style="margin-top: 20px;"><strong>Implicaciones revolucionarias:</strong></p>
+                <ul>
+                    <li><span class="highlight">Datos \(\gg\) Algoritmo:</span> La cantidad de datos es más importante que el algoritmo específico</li>
+                    <li><span class="highlight">Escala \(\gg\) Optimización:</span> Una red grande entrenada simplemente vence a una pequeña optimizada ingeniosamente</li>
+                    <li><span class="highlight">Experiencia \(\gg\) Labels:</span> El aprendizaje por refuerzo genera "experiencia" infinita automáticamente</li>
+                    <li><span class="highlight">Compute es el bottleneck:</span> GPUs/TPUs son el recurso limitante, no las ideas</li>
+                </ul>
+
+                <div class="formula" style="margin-top: 20px;">
+                    $$\text{AlphaGo: Jugar millones de partidas} \to \text{Superhuman en Go}$$
+                </div>
+            </div>
+
+            <h3>Backpropagation: El Motor del Aprendizaje Profundo</h3>
+
+            <p>Backpropagation (Rumelhart et al., 1986) computa gradientes eficientemente usando la regla de la cadena. Sin él, entrenar redes profundas sería computacionalmente prohibitivo.</p>
+
+            <div class="formula">
+                $$\frac{\partial \mathcal{L}}{\partial \theta} = \frac{\partial \mathcal{L}}{\partial \hat{y}} \cdot \frac{\partial \hat{y}}{\partial h_{\ell}} \cdot \frac{\partial h_{\ell}}{\partial h_{\ell-1}} \cdots \frac{\partial h_2}{\partial \theta}$$
+            </div>
+
+            <div class="concept">
+                <p style="margin-top: 15px;"><strong>Algoritmo en dos fases:</strong></p>
+                <ol>
+                    <li><strong>Forward pass:</strong> Propagar datos \(x \to \hat{y}\), guardar todas las activaciones</li>
+                    <li><strong>Backward pass:</strong> Propagar el error \(\hat{y} \to x\), computar \(\nabla \mathcal{L}\) usando activaciones guardadas</li>
+                </ol>
+
+                <div class="formula" style="margin-top: 15px;">
+                    $$\text{Complejidad: Forward} = O(n_{\text{parámetros}}), \quad \text{Backward} \approx 2 \times \text{Forward}$$
+                </div>
+
+                <p style="margin-top: 15px;"><strong>¿Por qué es tan eficiente?</strong></p>
+                <ul>
+                    <li>Reutiliza cálculos intermedios (no recalcula derivadas parciales)</li>
+                    <li>\(O(n)\) en lugar de \(O(n^2)\) o peor</li>
+                    <li>Fundamental para entrenar redes de millones de parámetros</li>
+                </ul>
+            </div>
+
+            <h3>ReLU y Mapeo de Regiones</h3>
+
+            <p>La función de activación ReLU es la más utilizada en redes modernas:</p>
+
+            <div class="formula">
+                $$\text{ReLU}(x) = \max(0, x)$$
+            </div>
+
+            <div class="concept">
+                <p style="margin-top: 15px;"><strong>Ventajas sobre sigmoid/tanh:</strong></p>
+                <ul>
+                    <li>✓ Computacionalmente eficiente (una comparación)</li>
+                    <li>✓ Gradientes bien comportados (no se saturen)</li>
+                    <li>✓ Induce sparsidad (muchas neuronas inactivas = eficiencia)</li>
+                    <li>✓ Acelera convergencia 6-10x comparado con sigmoid</li>
+                    <li>✗ "Dead ReLU": Si \(z < 0\) siempre, la neurona nunca aprende (variantes: Leaky ReLU, ELU)</li>
+                </ul>
+            </div>
+
+            <p style="margin-top: 25px;"><strong>Capacidad de Representación:</strong> Una red ReLU profunda mapea el espacio de entrada en regiones lineales por partes. Cada región tiene su propio clasificador/regresor lineal.</p>
+
+            <div class="formula" style="margin-top: 20px;">
+                $$\text{Con } d \text{ capas ocultas: } \approx 2^d \text{ regiones}$$
+            </div>
+
+            <div class="key-point">
+                <strong>💡 Por qué "Deep" Learning:</strong> La profundidad es exponencialmente más eficiente que el ancho:
                 <ul style="margin-top: 15px;">
-                    <li><span class="highlight">Datos > Algoritmos:</span> La cantidad de datos es más importante que el algoritmo específico</li>
-                    <li><span class="highlight">Escala > Optimización:</span> Redes grandes con datos masivos vencen optimizaciones ingenuas en pequeñas redes</li>
-                    <li><span class="highlight">Experiencia directa:</span> Las redes aprenden mejor jugando/experimentando que desde datos etiquetados</li>
-                    <li><span class="highlight">Aprendizaje por refuerzo:</span> Proporciona una fuente de "experiencia" infinita y automática</li>
-                </ul>
-
-                <p style="margin-top: 20px;"><strong>Implicación para Deep Learning:</strong></p>
-                <ul>
-                    <li>❌ No necesitas algoritmo "perfecto"</li>
-                    <li>❌ No necesitas features de ingeniería sofisticadas</li>
-                    <li>✓ Necesitas DATOS - cuantos más, mejor</li>
-                    <li>✓ Necesitas ESCALA - redes más grandes entrenadas más tiempo</li>
-                    <li>✓ Necesitas COMPUTACIÓN - GPUs/TPUs para escalar</li>
+                    <li>Red shallow con \(k\) neuronas: \(O(k)\) regiones</li>
+                    <li>Red profunda con \(d\) capas: \(O(2^d)\) regiones</li>
+                    <li>Para 256 regiones: profundo necesita 8 capas, shallow necesita 256 neuronas</li>
                 </ul>
             </div>
 
-            <h3>Backpropagation</h3>
-
-            <div class="concept">
-                <p><strong>Backpropagation:</strong> Algoritmo para computar gradientes eficientemente en redes profundas usando regla de la cadena.</p>
-
-                <div class="formula" style="margin-top: 15px;">
-                    <p><strong>Regla de la cadena (esencia de backprop):</strong></p>
-                    <code>∂L/∂w = (∂L/∂ŷ) × (∂ŷ/∂h) × (∂h/∂w)</code>
-                </div>
-
-                <p style="margin-top: 15px;"><strong>Algoritmo:</strong></p>
-                <ol>
-                    <li><strong>Forward pass:</strong> Propagar datos desde entrada a salida, guardar activaciones</li>
-                    <li><strong>Computar pérdida:</strong> L(ŷ, y)</li>
-                    <li><strong>Backward pass:</strong> Propagar errores desde salida a entrada</li>
-                    <li><strong>Actualizar pesos:</strong> θ ← θ - α ∇L</li>
-                </ol>
-
-                <div class="formula" style="margin-top: 15px;">
-                    <p><strong>Complejidad:</strong></p>
-                    <code>Forward: O(n_parámetros)<br>Backward: ~2 × Forward</code>
-                </div>
-
-                <p style="margin-top: 15px;"><strong>¿Por qué es eficiente?</strong></p>
-                <ul>
-                    <li>Reutiliza computaciones (no recalcula derivadas)</li>
-                    <li>O(n) no O(n²) donde n = # parámetros</li>
-                    <li>Fundamental para entrenar redes profundas</li>
-                </ul>
-            </div>
-
-            <h3>Redes ReLU y Mapeo de Regiones</h3>
-
-            <div class="concept">
-                <p><strong>ReLU (Rectified Linear Unit):</strong> Función de activación más popular.</p>
-
-                <div class="formula" style="margin-top: 15px;">
-                    <code>ReLU(x) = max(0, x)</code>
-                </div>
-
-                <p style="margin-top: 15px;"><strong>Propiedades:</strong></p>
-                <ul>
-                    <li>✓ Computacionalmente eficiente</li>
-                    <li>✓ No satura (a diferencia de sigmoid/tanh)</li>
-                    <li>✓ Induce sparsidad (muchas unidades = 0)</li>
-                    <li>✓ Gradientes bien comportados</li>
-                    <li>✗ Neurona muerta: si ReLU(x) = 0 siempre, nunca aprende</li>
-                </ul>
-            </div>
-
-            <div class="concept">
-                <p style="margin-top: 20px;"><strong>Mapeo de Regiones con ReLU:</strong> Una red ReLU profunda mapea el espacio de entrada en regiones lineales por partes.</p>
-
-                <p style="margin-top: 15px;">Cada región tiene su propio clasificador/regresor lineal. Con más capas:</p>
-                <ul>
-                    <li><strong>1 capa oculta:</strong> ~2 regiones</li>
-                    <li><strong>2 capas ocultas:</strong> Potencialmente 2⁴ = 16 regiones</li>
-                    <li><strong>n capas ocultas:</strong> 2ⁿ regiones</li>
-                </ul>
-
-                <div class="formula" style="margin-top: 15px;">
-                    <p><strong>Capacidad de aproximación:</strong></p>
-                    <code>Red profunda con d capas ≈ 2^(2^d) regiones</code>
-                </div>
-
-                <p style="margin-top: 15px;"><strong>Implicación:</strong> La profundidad es exponencialmente más eficiente que el ancho para crear regiones complejas. Por eso "Deep" Learning.</p>
-            </div>
-
-            <h3>Resumen: Por qué Deep Learning Funciona</h3>
-
-            <div class="key-point">
-                <ol>
-                    <li><strong>Jerárquía de características:</strong> Cada capa aprende features más abstractas</li>
-                    <li><strong>Regularización implícita:</strong> ReLU + Dropout + Batch Norm evitan overfitting</li>
-                    <li><strong>Eficiencia de representación:</strong> Profundidad exponencial en capacidad vs ancho</li>
-                    <li><strong>Aprendizaje de escala:</strong> Más datos + más parámetros + más compute = mejor rendimiento</li>
-                    <li><strong>Backprop eficiente:</strong> Entrenar redes de millones de parámetros es posible</li>
-                </ol>
-            </div>
+            <div class="divider"></div>
         </section>
 
-        <!-- CONCLUSIÓN -->
-        <section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-left: none;">
-            <h2 style="color: white; border-bottom-color: white;">🎓 Conclusión: Dominio Completo de ML</h2>
+        <!-- CONCLUSION -->
+        <section style="background: linear-gradient(135deg, #1a3a52 0%, #2e5266 100%); color: white; border-left: none; text-align: center;">
+            <h2 style="color: white; border-bottom-color: rgba(255,255,255,0.3);">🎓 Dominio Experto: Conclusión</h2>
 
-            <p style="color: #f0f0f0;">Ahora que dominas estos 5 pilares fundamentales, tienes la base para:</p>
+            <p style="color: rgba(255, 255, 255, 0.95); font-size: 1.15em; margin-top: 25px;">Tras completar esta guía exhaustiva, tienes ahora la base teórica para:</p>
 
-            <ul style="color: #f0f0f0;">
-                <li>✓ Entender cualquier algoritmo de ML moderno</li>
-                <li>✓ Implementar desde cero (no solo usar librerías)</li>
-                <li>✓ Elegir el algoritmo correcto para cada problema</li>
-                <li>✓ Debuggear problemas de entrenamiento</li>
-                <li>✓ Optimizar modelos para producción</li>
-                <li>✓ Contribuir a investigación en IA</li>
-            </ul>
+            <div style="text-align: left; display: inline-block; max-width: 600px; margin: 30px auto;">
+                <ul style="color: rgba(255, 255, 255, 0.9); font-size: 1.05em;">
+                    <li>✓ Entender <strong>cualquier</strong> algoritmo de ML moderno</li>
+                    <li>✓ Implementar desde cero (no solo usar librerías)</li>
+                    <li>✓ Elegir el algoritmo correcto para cada problema</li>
+                    <li>✓ Debuggear problemas en entrenamiento</li>
+                    <li>✓ Optimizar modelos para producción</li>
+                    <li>✓ Leer papers de investigación en IA</li>
+                    <li>✓ Contribuir a avances en inteligencia artificial</li>
+                </ul>
+            </div>
 
-            <p style="margin-top: 20px; color: #f0f0f0;"><strong>Próximos pasos recomendados:</strong></p>
-            <ul style="color: #f0f0f0;">
-                <li>📚 Implementa todos estos algoritmos en código (Python/NumPy)</li>
-                <li>📊 Aplica a datasets reales (Kaggle, UCI ML Repository)</li>
-                <li>📖 Lee papers clásicos: LeCun et al., Hinton et al., Bengio et al.</li>
-                <li>🎯 Especialízate en un área (CV, NLP, RL, etc.)</li>
-            </ul>
-
-            <p style="margin-top: 20px; color: #f0f0f0;"><strong>¡Eres ahora un experto en ML! 🚀</strong></p>
+            <p style="color: rgba(255, 255, 255, 0.85); font-style: italic; margin-top: 30px;">La verdadera maestría viene de la práctica deliberada.</p>
         </section>
     </div>
 
     <footer>
-        <p>📖 Guía Completa de Machine Learning | Creada para convertirte en Experto en IA</p>
-        <p>© 2026 | Última actualización: Mayo 2026</p>
-        <p style="margin-top: 15px; font-size: 0.9em;">Basada en cursos avanzados de Stanford, MIT y investigación de Deep Learning (LeCun, Hinton, Bengio, Silver, Sutton)</p>
+        <p><strong>Guía Definitiva de Machine Learning</strong></p>
+        <p>Aprendizaje por Refuerzo • Clasificación Lineal • SVM • Kernels • Deep Learning</p>
+        <p style="margin-top: 20px; opacity: 0.8;">Basada en literatura académica clásica y moderna en inteligencia artificial</p>
+        <div class="references">
+            <p><strong>Referencias Principales:</strong></p>
+            <div class="reference-item">Sutton, R. S., & Barto, A. G. (2018). <em>Reinforcement Learning: An Introduction</em>. MIT Press.</div>
+            <div class="reference-item">Hastie, T., Tibshirani, R., & Friedman, J. (2009). <em>The Elements of Statistical Learning</em>. Springer.</div>
+            <div class="reference-item">Goodfellow, I., Bengio, Y., & Courville, A. (2016). <em>Deep Learning</em>. MIT Press.</div>
+            <div class="reference-item">Cristianini, N., & Shawe-Taylor, J. (2000). <em>An Introduction to Support Vector Machines</em>. Cambridge University Press.</div>
+        </div>
     </footer>
 </body>
 </html>
