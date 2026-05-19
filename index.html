@@ -1193,7 +1193,523 @@
             <div class="divider" style="height: 2px; background: var(--border-color); margin: 40px 0;"></div>
         </section>
 
-        <!-- CONTINUARÁ CON PROBLEMAS 3, 4, 5 EN SIGUIENTE SEGMENTO -->
+        <section>
+            <h2>📝 PROBLEMA 3: Máquinas de Vectores de Soporte (2 puntos)</h2>
+
+            <div class="question">
+                <h4>3.1 Análisis Verdadero/Falso sobre SVM</h4>
+
+                <p><strong>Dado:</strong> Un conjunto de entrenamiento linealmente separable donde existe $\theta', \theta_0'$ tal que $y^{(i)}(\theta' \cdot x^{(i)} + \theta_0') > 0$ para todo $i$.</p>
+
+                <p><strong>Sea $\hat{\theta}, \hat{\theta}_0$ los parámetros del clasificador de margen máximo. Determina V/F:</strong></p>
+
+                <ol type="a">
+                    <li>El problema de minimización tiene solución si y solo si los ejemplos son linealmente separables</li>
+                    <li>Los ejemplos son linealmente separables bajo nuestros supuestos</li>
+                    <li>$(\theta' \cdot x^{(i)} + \theta_0') \leq (\hat{\theta} \cdot x^{(i)} + \hat{\theta}_0)$ para todo $i$</li>
+                    <li>$\|\theta'\| \geq \|\hat{\theta}\|$</li>
+                </ol>
+            </div>
+
+            <div class="answer">
+                <strong>Respuestas y Justificaciones:</strong>
+
+                <p style="margin-top: 15px;"><strong>a) VERDADERO</strong></p>
+                <div class="explanation">
+                    Justificación: El problema de SVM es:
+                    $$\min \frac{1}{2}\|\theta\|^2 \quad \text{s.t. } y^{(i)}(\theta \cdot x^{(i)} + \theta_0) \geq 1$$
+
+                    Este es un problema de optimización cuadrática convexa. Tiene solución si y solo si las restricciones son factibles, lo que ocurre exactamente cuando los datos son linealmente separables. Si no son separables, no existe $(\theta, \theta_0)$ que satisfaga todas las restricciones.
+                </div>
+
+                <p style="margin-top: 20px;"><strong>b) VERDADERO</strong></p>
+                <div class="explanation">
+                    Justificación: El enunciado dice "existe $\theta', \theta_0'$ tal que $y^{(i)}(\theta' \cdot x^{(i)} + \theta_0') > 0$", lo que es exactamente la definición de separabilidad lineal. Por lo tanto, bajo nuestros supuestos, los datos SON linealmente separables.
+                </div>
+
+                <p style="margin-top: 20px;"><strong>c) FALSO</strong></p>
+                <div class="explanation">
+                    Justificación: No hay relación ordenada general entre $\theta'$ y $\hat{\theta}$.
+
+                    Contraejemplo: Supón datos en 2D separables por:
+                    <ul style="margin-top: 10px;">
+                        <li>$\theta' = (1, 0)$ con margen pequeño</li>
+                        <li>$\hat{\theta} = (0.7, 0.7)$ con margen máximo</li>
+                    </ul>
+
+                    El hiperplano $\hat{\theta}$ de margen máximo podría tener valores más altos que $\theta'$ para algunos puntos y más bajos para otros. No hay relación de orden total.
+
+                    Lo que SÍ es cierto: $\|\hat{\theta}\| \leq \|\theta'\|$ (el margen máximo es el menor $\|\theta\|$).
+                </div>
+
+                <p style="margin-top: 20px;"><strong>d) VERDADERO</strong></p>
+                <div class="explanation">
+                    Justificación: SVM resuelve:
+                    $$\hat{\theta} = \arg\min_\theta \frac{1}{2}\|\theta\|^2 \quad \text{s.t. } y^{(i)}(\theta \cdot x^{(i)} + \theta_0) \geq 1$$
+
+                    Por definición de minimización, $\|\hat{\theta}\|$ es el mínimo posible entre todos los $\theta$ que separan los datos. Cualquier otro separador válido $\theta'$ debe tener $\|\theta'\| \geq \|\hat{\theta}\|$.
+
+                    Matemáticamente: $\hat{\theta}$ es la solución óptima del problema convexo, entonces cualquier solución factible $\theta'$ satisface $f(\theta') \geq f(\hat{\theta})$, es decir, $\|\theta'\| \geq \|\hat{\theta}\|$.
+                </div>
+
+                <p style="margin-top: 20px;"><strong>Resumen intuitivo:</strong> El separador de margen máximo es el "más parsimonioso" (tiene la norma más pequeña). Otros separadores válidos deben tener normas más grandes. Este es el principio de regularización implícita en SVM.</p>
+            </div>
+
+            <div class="question">
+                <h4>3.2 Identificación de Kernels por Gráfica</h4>
+
+                <p><strong>Dado:</strong> Cuatro gráficas de límites de decisión de SVM.</p>
+
+                <p><strong>Kernels disponibles:</strong></p>
+                <ul style="margin-top: 10px;">
+                    <li>$K_1(x,x') = (1 + \frac{x \cdot x'}{2})^1$</li>
+                    <li>$K_2(x,x') = (1 + \frac{x \cdot x'}{2})^2$</li>
+                    <li>$K_3(x,x') = (1 + \frac{x \cdot x'}{2})^3$</li>
+                    <li>$K_4(x,x') = \exp(\|x \cdot x'\|^2 / 2)$ (RBF)</li>
+                </ul>
+
+                <p style="margin-top: 15px;"><strong>Restricciones C:</strong></p>
+                <ul>
+                    <li>$C_1$: $0 \leq \alpha_i \leq 0.1$ (margen muy suave)</li>
+                    <li>$C_2$: $\alpha_i \geq 0$ (margen duro/moderado)</li>
+                </ul>
+
+                <p style="margin-top: 15px;"><strong>Tarea:</strong> Para cada gráfica, identifica $(K, C)$ que la generó. Justifica.</p>
+            </div>
+
+            <div class="answer">
+                <strong>Metodología de Identificación:</strong>
+
+                <p style="margin-top: 15px;"><strong>Clave 1: Kernels en orden de complejidad</strong></p>
+                <ul>
+                    <li>$K_1$: Lineal (grado 1) → límites RECTOS</li>
+                    <li>$K_2$: Polinomial grado 2 → curvas suaves (parábolas, elipses)</li>
+                    <li>$K_3$: Polinomial grado 3 → curvas más complejas</li>
+                    <li>$K_4$ (RBF): Infinita dimensión → EXTREMADAMENTE flexible, puede ser muy irregular</li>
+                </ul>
+
+                <p style="margin-top: 20px;"><strong>Clave 2: Restricción C</strong></p>
+                <ul>
+                    <li>$C_1$ ($\alpha_i \leq 0.1$): Penaliza mucho los errores, margen estrecho, sigue los datos de cerca → OVERFITTING potencial</li>
+                    <li>$C_2$ ($\alpha_i \geq 0$): Margen moderado/normal → GENERALIZACIÓN mejor</li>
+                </ul>
+
+                <p style="margin-top: 20px;"><strong>Patrón típico de respuesta (sin ver gráficas):</strong></p>
+
+                <table style="margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th>Gráfica</th>
+                            <th>Límites observados</th>
+                            <th>Kernel + C</th>
+                            <th>Justificación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>(a)</td>
+                            <td>Líneas RECTAS</td>
+                            <td>$K_1, C_2$</td>
+                            <td>Lineal con margen normal</td>
+                        </tr>
+                        <tr>
+                            <td>(b)</td>
+                            <td>Curvas suaves simples</td>
+                            <td>$K_2, C_2$</td>
+                            <td>Polinomial grado 2</td>
+                        </tr>
+                        <tr>
+                            <td>(c)</td>
+                            <td>Curvas muy complejas/irregulares</td>
+                            <td>$K_4, C_1$</td>
+                            <td>RBF + restricción baja = máxima flexibilidad + pequeño margen</td>
+                        </tr>
+                        <tr>
+                            <td>(d)</td>
+                            <td>Curvas moderadamente complejas</td>
+                            <td>$K_3, C_2$</td>
+                            <td>Polinomial grado 3</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 20px;"><strong>Regla práctica para tu examen:</strong></p>
+                <ol>
+                    <li>Si es una LÍNEA RECTA → $K_1$</li>
+                    <li>Si son curvas SUAVES Y SIMPLES → $K_2$ o $K_3$</li>
+                    <li>Si son EXTREMADAMENTE complejas/irregulares → $K_4$ (RBF)</li>
+                    <li>Si el margen es MUY ESTRECHO (sigue los datos) → $C_1$</li>
+                    <li>Si el margen es NORMAL/AMPLIO → $C_2$</li>
+                </ol>
+            </div>
+
+            <div class="divider" style="height: 2px; background: var(--border-color); margin: 40px 0;"></div>
+        </section>
+
+        <section>
+            <h2>📝 PROBLEMA 4: Aprendizaje Profundo (3 puntos)</h2>
+
+            <div class="question">
+                <h4>4.1 Maldición de la Dimensionalidad</h4>
+                <p><strong>Explica en qué consiste.</strong></p>
+            </div>
+
+            <div class="answer">
+                <strong>Explicación Completa:</strong>
+
+                <p style="margin-top: 15px;"><strong>Definición:</strong> La maldición de la dimensionalidad es el fenómeno donde propiedades del espacio se vuelven cada vez más contra-intuitivas y problemáticas conforme aumenta la dimensión $d$.</p>
+
+                <p style="margin-top: 20px;"><strong>Manifestaciones principales:</strong></p>
+
+                <div class="step">
+                    <p><strong>1. Crecimiento Exponencial del Volumen</strong></p>
+                    $$\text{Volumen}([-1, 1]^d) = 2^d$$
+
+                    <p style="margin-top: 10px;">En $d=1$: Volumen = 2<br>En $d=10$: Volumen = 1,024<br>En $d=100$: Volumen = $2^{100} \approx 10^{30}$ (incomprensiblemente grande)</p>
+                </div>
+
+                <div class="step">
+                    <p style="margin-top: 20px;"><strong>2. Necesidad Exponencial de Datos</strong></p>
+
+                    <p>Para mantener "densidad" de 1 punto por unidad de volumen en baja dimensión:</p>
+                    $$\text{Puntos necesarios} \approx \left(\frac{n}{c}\right)^d$$
+
+                    <p style="margin-top: 10px;">Donde $n$ es puntos por dimensión y $c$ es factor de escala.</p>
+
+                    <ul style="margin-top: 15px;">
+                        <li>$d=2, n=10$: 100 puntos</li>
+                        <li>$d=10, n=10$: $10^{10} \approx$ 10 mil millones de puntos</li>
+                        <li>$d=100, n=10$: $10^{100}$ puntos (más que átomos en universo observable)</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <p style="margin-top: 20px;"><strong>3. Distancias Pierden Significado</strong></p>
+
+                    <p>En alta dimensión, las distancias entre puntos aleatorios son casi todas iguales. Esto destruye métodos como k-NN que dependen de distancia.</p>
+
+                    $$\frac{\max_i \|x_i\| - \min_i \|x_i\|}{\text{min}_i \|x_i\|} \to 0 \text{ cuando } d \to \infty$$
+                </div>
+
+                <div class="step">
+                    <p style="margin-top: 20px;"><strong>4. Datos Caen en los Bordes</strong></p>
+
+                    <p>En alta dimensión, casi todos los puntos de un hipercubo están cerca de su superficie, no en el interior. Esto hace que la mayoría de los datos sean "extraños" o "outliers".</p>
+                </div>
+
+                <p style="margin-top: 20px;"><strong>Implicación para ML:</strong> Sin estrategias especiales (como Deep Learning), necesitarías exponencialmente más datos para resolver problemas en alta dimensión. Deep Learning soluciona esto aprendiendo representaciones de baja dimensión.</p>
+            </div>
+
+            <div class="question">
+                <h4>4.2 Función de Regresión y MSE</h4>
+                <p><strong>¿Cuál es la función de regresión? ¿Qué minimiza?</strong></p>
+            </div>
+
+            <div class="answer">
+                <strong>Respuesta Detallada:</strong>
+
+                <p style="margin-top: 15px;"><strong>Función de Regresión (Modelo Paramétrico):</strong></p>
+
+                <div class="formula-block">
+                    $$\hat{y} = f_\theta(x) = w_\ell^T \sigma(w_{\ell-1}^T \sigma(\cdots \sigma(w_1^T x + b_1) \cdots + b_{\ell-1}) + b_\ell)$$
+
+                    <p style="margin-top: 15px;">O más compactamente para regresión lineal simple:</p>
+                    $$\hat{y} = \theta^T x + \theta_0$$
+
+                    <p style="margin-top: 15px;">Donde:</p>
+                    <ul>
+                        <li>$\theta \in \mathbb{R}^d$: Pesos de la regresión</li>
+                        <li>$\theta_0 \in \mathbb{R}$: Sesgo (intercept)</li>
+                        <li>$x \in \mathbb{R}^d$: Características de entrada</li>
+                    </ul>
+                </div>
+
+                <p style="margin-top: 20px;"><strong>¿Qué minimiza?</strong></p>
+
+                <div class="formula-block theorem">
+                    <p><strong>Error Cuadrático Medio (MSE):</strong></p>
+                    $$\mathcal{L} = \frac{1}{m} \sum_{i=1}^m (y^{(i)} - \hat{y}^{(i)})^2$$
+
+                    <p style="margin-top: 15px;">En forma matricial:</p>
+                    $$\mathcal{L} = \|\mathbf{y} - \hat{\mathbf{y}}\|_2^2$$
+                </div>
+
+                <p style="margin-top: 20px;"><strong>¿Por qué MSE?</strong></p>
+                <ul>
+                    <li><strong>Interpretación probabilística:</strong> Equivalente a máxima verosimilitud bajo distribución normal de errores</li>
+                    <li><strong>Penalización cuadrática:</strong> Errores grandes son penalizados más que pequeños</li>
+                    <li><strong>Diferenciable:</strong> Puedes usar descenso de gradiente</li>
+                    <li><strong>Solución en forma cerrada:</strong> Para regresión lineal: $\theta^* = (X^T X)^{-1} X^T y$</li>
+                </ul>
+
+                <p style="margin-top: 20px;"><strong>Gradiente para optimización:</strong></p>
+                $$\nabla_\theta \mathcal{L} = -\frac{2}{m} X^T(y - \hat{y})$$
+
+                <p style="margin-top: 15px;">Este gradiente se usa en descenso de gradiente para actualizar $\theta$.</p>
+            </div>
+
+            <div class="question">
+                <h4>4.3 Deep Learning vs Shallow Learning</h4>
+                <p><strong>¿Cuál es la diferencia? Contrasta ventajas y desventajas.</strong></p>
+            </div>
+
+            <div class="answer">
+                <strong>Comparación Exhaustiva:</strong>
+
+                <table style="margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th>Dimensión</th>
+                            <th>Shallow (1-2 capas)</th>
+                            <th>Deep (3+ capas, típicamente 50-1000)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Capacidad Representacional</strong></td>
+                            <td>Limitada a funciones casi-lineales o features simples</td>
+                            <td>Puede aprender features jerárquicas y altamente no-lineales</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Número de parámetros</strong></td>
+                            <td>Pocos (cientos a miles)</td>
+                            <td>Muchos (millones a billones)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Datos requeridos</strong></td>
+                            <td>Menos (modelo simple, menos overfitting)</td>
+                            <td>Más (pero escala mejor: más datos → mejor rendimiento)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tiempo de entrenamiento</strong></td>
+                            <td>Rápido (segundos/minutos)</td>
+                            <td>Lento (horas/días), requiere GPU/TPU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Problemas que resuelve</strong></td>
+                            <td>Datos tabulares simples, problemas clásicos de ML</td>
+                            <td>Visión (ImageNet), Lenguaje (GPT), Audio, Control (Robotics)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Interpretabilidad</strong></td>
+                            <td>Alta (entiendes cada peso)</td>
+                            <td>Baja (caja negra)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Transferencia de Learning</strong></td>
+                            <td>Limitada</td>
+                            <td>Excelente (pre-entrenar en tarea grande, fine-tune en pequeña)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 25px;"><strong>¿Por qué Deep Learning domina en 2024?</strong></p>
+
+                <div class="key-insight">
+                    <p><strong>El paradigma cambió:</strong> Antes de 2012 (AlexNet), creíamos que más datos + computación = overfitting desastre. AlexNet mostró: Deep + Datos enormes + GPU = superhuman.</p>
+
+                    <p style="margin-top: 15px;">La "Era de la Experiencia" (Silver & Sutton): Tienes datos infinitos (imágenes de internet, juegos), computación barata (GPUs), y algoritmos que escalan (Deep Learning). Gana quien tiene más de las tres cosas.</p>
+                </div>
+            </div>
+
+            <div class="question">
+                <h4>4.4 Preguntas de Descenso de Gradiente y Entrenamiento</h4>
+            </div>
+
+            <div class="answer">
+                <p style="margin-top: 15px;"><strong>4.4.1 "SGD difiere de GD en actualizar solo un peso"</strong></p>
+
+                <p><strong>Respuesta: FALSO</strong></p>
+
+                <div class="explanation">
+                    <p><strong>Corrección:</strong> SGD actualiza TODOS los pesos, pero usa un mini-batch pequeño en lugar de todo el dataset.</p>
+
+                    <p style="margin-top: 15px;"><strong>Comparación:</strong></p>
+                    <ul>
+                        <li><strong>GD (Batch Gradient Descent):</strong> Computa gradiente sobre TODOS los $m$ ejemplos, luego actualiza todos los pesos</li>
+                        <li><strong>SGD:</strong> Computa gradiente sobre mini-batch (e.g., 32-256 ejemplos), luego actualiza todos los pesos</li>
+                        <li><strong>Vanilla SGD (1 ejemplo):</strong> Actualiza basado en 1 ejemplo</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;">Fórmula:</p>
+                    $$\theta \leftarrow \theta - \alpha \nabla_\theta \mathcal{L}(\theta; \text{mini-batch})$$
+
+                    <p style="margin-top: 15px;">El $\nabla_\theta$ tiene componentes para CADA peso: $\frac{\partial \mathcal{L}}{\partial \theta_1}, \frac{\partial \mathcal{L}}{\partial \theta_2}, \ldots, \frac{\partial \mathcal{L}}{\partial \theta_d}$</p>
+                </div>
+
+                <p style="margin-top: 25px;"><strong>4.4.2 "Lo importante es clasificar bien el entrenamiento"</strong></p>
+
+                <p><strong>Respuesta: FALSO (FALSO FALSO FALSO)</strong></p>
+
+                <div class="explanation">
+                    <p><strong>La verdad:</strong> Lo importante es generalizar a datos NUEVOS (test set).</p>
+
+                    <p style="margin-top: 15px;"><strong>Por qué es falso:</strong></p>
+                    <ul>
+                        <li><strong>Overfitting:</strong> Puedes memorizar el entrenamiento con ruido y predecir muy mal en test</li>
+                        <li><strong>Regularización:</strong> Típicamente sacrificas precisión en entrenamiento para ganar en test</li>
+                        <li><strong>Datos ruidosos:</strong> A veces es mejor estar EQUIVOCADO en ejemplos etiquetados mal</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Ejemplo:</strong> Modelo con 99% accuracy en entrenamiento pero 50% en test = inútil (sobreentrenado)</p>
+
+                    <p style="margin-top: 15px;">Lo importante es: Minimizar Error de Test (o estimado via validación cruzada)</p>
+                </div>
+            </div>
+
+            <div class="question">
+                <h4>4.5 Silver y Sutton: "Era de la Experiencia"</h4>
+            </div>
+
+            <div class="answer">
+                <p style="margin-top: 15px;"><strong>4.5.1 Limitaciones del aprendizaje solo de datos humanos</strong></p>
+
+                <div class="explanation">
+                    <p><strong>Limitaciones:</strong></p>
+                    <ul>
+                        <li><strong>Cantidad finita:</strong> Humanos pueden etiquetar solo millones, no miliardos</li>
+                        <li><strong>Costo:</strong> Etiquetar es caro (~$1-10 por ejemplo)</li>
+                        <li><strong>Sesgo humano:</strong> Los datos reflejan los errores y prejuicios humanos</li>
+                        <li><strong>Dominio limitado:</strong> Datos etiquetados solo en dominios donde hay expertos</li>
+                        <li><strong>Piso de rendimiento:</strong> No puedes superar a humanos si solo aprendes de humanos</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Ejemplo: AlphaGo</strong></p>
+                    <ul>
+                        <li>Primero entrenó con partidas de humanos (120,000 partidas) → nivel de 3000 Elo</li>
+                        <li>Luego aprendió jugando contra sí mismo (millones de partidas) → 3800+ Elo (superhuman)</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;">Los datos humanos eran el cuello de botella. La experiencia propia fue la solución.</p>
+                </div>
+
+                <p style="margin-top: 25px;"><strong>4.5.2 Ventajas del aprendizaje basado en experiencia</strong></p>
+
+                <div class="explanation">
+                    <ul>
+                        <li><strong>Datos ilimitados:</strong> El agente genera experiencias interactuando (o en simulación)</li>
+                        <li><strong>Costo cero:</strong> Simular es gratis (AlphaGo jugó millones de partidas en paralelo)</li>
+                        <li><strong>Supera humanos:</strong> Puede encontrar estrategias que humanos nunca descubrieron</li>
+                        <li><strong>Escalabilidad:</strong> Más datos + más computación = mejor rendimiento (ley de escala)</li>
+                        <li><strong>Dominio general:</strong> Funciona en cualquier simulador (juegos, robótica, etc.)</li>
+                    </ul>
+
+                    <div class="formula-block theorem">
+                        <p><strong>Ley de Escala (Emergente de Deep RL):</strong></p>
+                        $$\text{Rendimiento} \propto \text{(Datos)} \times \text{(Compute)} \times \text{(Algoritmo)}$$
+
+                        <p style="margin-top: 15px;">Mientras tengas datos + compute, el rendimiento mejora predeciblemente.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider" style="height: 2px; background: var(--border-color); margin: 40px 0;"></div>
+        </section>
+
+        <section>
+            <h2>📝 PROBLEMA 5: Red Neuronal con ReLU (1 punto)</h2>
+
+            <div class="question">
+                <h4>Mapeo de Regiones con Unidades ReLU</h4>
+
+                <p><strong>Contexto:</strong> Red feedforward de 2 capas con 2 unidades ocultas ReLU.</p>
+
+                <p style="margin-top: 15px;"><strong>Ecuaciones:</strong></p>
+                <div class="formula-block">
+                    $$z_1 = x_1 w_{1,1} + x_2 w_{2,1}$$
+                    $$z_2 = x_1 w_{1,2} + x_2 w_{2,2}$$
+                    $$f(z_j) = \max(0, z_j) \quad \text{(ReLU)}$$
+                    $$\hat{z} = f(z_1)v_1 + f(z_2)v_2 + v_0$$
+                </div>
+
+                <p style="margin-top: 15px;"><strong>La red divide el espacio en 4 regiones (I, II, III, IV) usando dos líneas.</strong></p>
+
+                <p style="margin-top: 15px;"><strong>Pregunta: ¿Qué región(es) en el espacio $(x_1, x_2)$ mapean a:</strong></p>
+                <ol>
+                    <li>$\{(f_1, f_2) : f_1 > 0, f_2 > 0\}$</li>
+                    <li>Eje-$f_1$ (donde $f_2 = 0$)</li>
+                    <li>Eje-$f_2$ (donde $f_1 = 0$)</li>
+                    <li>Origen $(f_1, f_2) = (0, 0)$</li>
+                </ol>
+            </div>
+
+            <div class="answer">
+                <strong>Análisis Paso a Paso:</strong>
+
+                <p style="margin-top: 15px;"><strong>Entendimiento clave:</strong> $f_j = \max(0, z_j)$</p>
+
+                <div class="step">
+                    <p>$f_1 > 0 \iff z_1 > 0$</p>
+                    <p>$f_2 > 0 \iff z_2 > 0$</p>
+
+                    <p style="margin-top: 15px;">Donde:</p>
+                    <ul>
+                        <li>$z_1 = x_1 w_{1,1} + x_2 w_{2,1}$ es una línea (frontera entre $z_1 > 0$ y $z_1 \leq 0$)</li>
+                        <li>$z_2 = x_1 w_{1,2} + x_2 w_{2,2}$ es otra línea</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;">Estas dos líneas dividen el plano en 4 regiones: I, II, III, IV</p>
+                </div>
+
+                <p style="margin-top: 20px;"><strong>Respuestas (estructura general):</strong></p>
+
+                <table style="margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th>Condición en $(f_1, f_2)$</th>
+                            <th>Región(es) en $(x_1, x_2)$</th>
+                            <th>Razonamiento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>$f_1 > 0, f_2 > 0$</td>
+                            <td>Región donde $z_1 > 0$ Y $z_2 > 0$</td>
+                            <td>ReLU activo en ambas unidades</td>
+                        </tr>
+                        <tr>
+                            <td>$f_2 = 0, f_1 > 0$</td>
+                            <td>Región donde $z_1 > 0$ Y $z_2 \leq 0$</td>
+                            <td>Una neurona inactiva</td>
+                        </tr>
+                        <tr>
+                            <td>$f_1 = 0, f_2 > 0$</td>
+                            <td>Región donde $z_1 \leq 0$ Y $z_2 > 0$</td>
+                            <td>La otra neurona inactiva</td>
+                        </tr>
+                        <tr>
+                            <td>$f_1 = 0, f_2 = 0$</td>
+                            <td>Región donde $z_1 \leq 0$ Y $z_2 \leq 0$</td>
+                            <td>Ambas neuronas inactivas</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 25px;"><strong>Ejemplo concreto (supongamos):</strong></p>
+
+                <p>Si las dos líneas se cruzan formando 4 cuadrantes:</p>
+                <ul style="margin-top: 15px;">
+                    <li>Región I (arriba-derecha): $z_1 > 0, z_2 > 0$ → $(f_1, f_2) : f_1 > 0, f_2 > 0$</li>
+                    <li>Región II (arriba-izquierda): $z_1 \leq 0, z_2 > 0$ → $(f_1, f_2)$: $f_1 = 0, f_2 > 0$ (Eje-$f_2$)</li>
+                    <li>Región III (abajo-izquierda): $z_1 \leq 0, z_2 \leq 0$ → $(f_1, f_2) = (0, 0)$ (Origen)</li>
+                    <li>Región IV (abajo-derecha): $z_1 > 0, z_2 \leq 0$ → $(f_1, f_2)$: $f_1 > 0, f_2 = 0$ (Eje-$f_1$)</li>
+                </ul>
+
+                <p style="margin-top: 20px;"><strong>Principio general para tu examen:</strong></p>
+                <div class="key-insight">
+                    <p>ReLU mapea:</p>
+                    <ul>
+                        <li>Regiones donde $z_j > 0$ → $f_j > 0$</li>
+                        <li>Regiones donde $z_j \leq 0$ → $f_j = 0$</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;">Cada región de $(x_1, x_2)$ se mapea a exactamente un punto en el espacio $(f_1, f_2)$ (o mejor dicho, una región lineal, porque la función es lineal por partes).</p>
+                </div>
+            </div>
+
+            <div class="divider" style="height: 2px; background: var(--border-color); margin: 40px 0;"></div>
+        </section>
+
     </div>
 
     <footer>
