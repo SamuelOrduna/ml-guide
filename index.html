@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guía Completa de Machine Learning - Aprendizaje Profundo, Refuerzo y Máquinas de Vectores</title>
-
-    <!-- MathJax for LaTeX -->
+    <title>RL Mastery - Basado en Sutton & Barto | Curso Progresivo Completo</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-
     <style>
         * {
             margin: 0;
@@ -17,15 +14,17 @@
         }
 
         :root {
-            --primary: #1a3a52;
-            --secondary: #2e5266;
-            --accent: #6c8ebf;
-            --light-accent: #b8cae0;
+            --primary: #0d47a1;
+            --secondary: #1565c0;
+            --accent: #0277bd;
+            --light-accent: #4fc3f7;
             --background: #f5f7fa;
             --card-bg: #ffffff;
-            --text-primary: #1a1a1a;
-            --text-secondary: #4a4a4a;
+            --text-primary: #0d0d0d;
+            --text-secondary: #424242;
             --border-color: #e0e4e8;
+            --success: #2e7d32;
+            --warning: #f57f17;
         }
 
         html {
@@ -33,76 +32,39 @@
         }
 
         body {
-            font-family: 'Merriweather', 'Georgia', serif;
-            line-height: 1.75;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            line-height: 1.8;
             color: var(--text-primary);
             background-color: var(--background);
-            background-image:
-                radial-gradient(circle at 20% 80%, rgba(108, 142, 191, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(46, 82, 102, 0.05) 0%, transparent 50%);
-            background-attachment: fixed;
         }
 
-        /* Header */
         header {
-            background: linear-gradient(135deg, #1a3a52 0%, #2e5266 100%);
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
             color: white;
-            padding: 80px 40px;
+            padding: 60px 40px;
             text-align: center;
-            box-shadow: 0 10px 40px rgba(26, 58, 82, 0.15);
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.1)"/></svg>');
-            background-repeat: repeat-x;
-            opacity: 0.3;
-        }
-
-        header > * {
-            position: relative;
-            z-index: 1;
+            box-shadow: 0 4px 20px rgba(13, 71, 161, 0.2);
         }
 
         header h1 {
-            font-size: 3.2em;
-            margin-bottom: 15px;
-            font-weight: 700;
-            letter-spacing: -1px;
-            line-height: 1.2;
-        }
-
-        header .subtitle {
-            font-size: 1.3em;
-            opacity: 0.95;
-            font-style: italic;
+            font-size: 2.8em;
             margin-bottom: 10px;
+            font-weight: 700;
         }
 
-        header .authors {
-            font-size: 0.95em;
-            opacity: 0.85;
-            margin-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            padding-top: 15px;
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
         }
 
-        /* Navigation */
         nav {
             background-color: var(--card-bg);
             padding: 0;
-            border-bottom: 2px solid var(--primary);
+            border-bottom: 3px solid var(--primary);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         nav ul {
@@ -114,21 +76,14 @@
             margin: 0 auto;
         }
 
-        nav li {
-            flex: 1;
-            min-width: 160px;
-            text-align: center;
-        }
-
         nav a {
             color: var(--primary);
             text-decoration: none;
             font-weight: 600;
-            padding: 18px 15px;
+            padding: 16px 18px;
             display: block;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             border-bottom: 3px solid transparent;
-            font-family: 'Segoe UI', sans-serif;
             font-size: 0.95em;
         }
 
@@ -138,167 +93,101 @@
             color: var(--accent);
         }
 
-        /* Main container */
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 60px 30px;
+            padding: 50px 30px;
         }
 
-        /* Table of contents */
-        .toc {
-            background-color: var(--card-bg);
-            padding: 40px;
-            border-radius: 8px;
-            margin-bottom: 60px;
-            border-left: 5px solid var(--accent);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        }
-
-        .toc h2 {
-            color: var(--primary);
-            margin-bottom: 25px;
-            font-size: 1.8em;
-            border-bottom: 2px solid var(--light-accent);
-            padding-bottom: 15px;
-        }
-
-        .toc ol {
-            margin-left: 30px;
-        }
-
-        .toc li {
-            margin-bottom: 12px;
-            color: var(--text-secondary);
-            font-size: 1.05em;
-        }
-
-        /* Sections */
         section {
-            margin-bottom: 70px;
-            padding: 50px;
+            margin-bottom: 60px;
+            padding: 40px;
             background-color: var(--card-bg);
             border-radius: 8px;
             border-left: 5px solid var(--accent);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         section h2 {
             color: var(--primary);
-            font-size: 2.3em;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
             border-bottom: 2px solid var(--light-accent);
-            line-height: 1.3;
         }
 
         section h3 {
             color: var(--secondary);
-            font-size: 1.6em;
-            margin-top: 40px;
-            margin-bottom: 20px;
-            font-weight: 600;
+            font-size: 1.5em;
+            margin-top: 35px;
+            margin-bottom: 18px;
         }
 
         section h4 {
             color: var(--accent);
-            font-size: 1.25em;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            font-weight: 600;
+            font-size: 1.2em;
+            margin-top: 25px;
+            margin-bottom: 12px;
         }
 
         p {
-            margin-bottom: 18px;
-            color: var(--text-secondary);
+            margin-bottom: 16px;
             text-align: justify;
-            font-size: 1.05em;
+            font-size: 1.02em;
             line-height: 1.85;
         }
 
-        /* Concept boxes */
-        .concept {
-            background: linear-gradient(135deg, rgba(108, 142, 191, 0.08) 0%, rgba(184, 202, 224, 0.08) 100%);
+        .definition {
+            background: linear-gradient(135deg, rgba(13, 71, 161, 0.08) 0%, rgba(79, 195, 247, 0.08) 100%);
+            padding: 20px;
+            border-left: 5px solid var(--primary);
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .formula-block {
+            background: #f5f5f5;
             padding: 25px;
             border-radius: 6px;
             margin: 25px 0;
-            border-left: 4px solid var(--accent);
-            border-top: 1px solid var(--light-accent);
-        }
-
-        .concept strong {
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        /* Formula boxes */
-        .formula {
-            background: linear-gradient(135deg, #f0f3f8 0%, #e8ecf3 100%);
-            padding: 30px;
-            border-radius: 6px;
-            margin: 30px 0;
-            border: 1px solid var(--light-accent);
+            border: 1px solid var(--border-color);
             overflow-x: auto;
-            text-align: center;
         }
 
-        .formula code, .formula p {
-            font-family: 'Courier New', monospace;
-            color: var(--primary);
-            font-size: 1em;
-            text-align: center;
+        .formula-block.theorem {
+            background: linear-gradient(135deg, rgba(46, 125, 50, 0.08) 0%, rgba(76, 175, 80, 0.08) 100%);
+            border-left: 5px solid var(--success);
         }
 
-        /* Key points */
-        .key-point {
-            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%);
-            border-left: 4px solid #ffc107;
-            border-top: 1px solid #ffc107;
-            padding: 25px;
-            margin: 25px 0;
-            border-radius: 6px;
+        .explanation {
+            background: linear-gradient(135deg, rgba(245, 127, 23, 0.08) 0%, rgba(255, 152, 0, 0.08) 100%);
+            border-left: 5px solid var(--warning);
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 5px;
         }
 
-        .key-point strong {
-            color: #d97706;
-            font-weight: 700;
+        .step {
+            background: #e3f2fd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 4px solid var(--accent);
         }
 
-        /* Example boxes */
-        .example {
-            background: linear-gradient(135deg, rgba(33, 150, 243, 0.08) 0%, rgba(100, 181, 246, 0.08) 100%);
-            border-left: 4px solid #2196F3;
-            border-top: 1px solid #64B5F6;
-            padding: 25px;
-            margin: 25px 0;
-            border-radius: 6px;
+        .example-box {
+            background: #f0f4c3;
+            border-left: 4px solid #9ccc65;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
         }
 
-        .example strong {
-            color: #1565c0;
-        }
-
-        /* Lists */
-        ul, ol {
-            margin-left: 35px;
-            margin-bottom: 20px;
-        }
-
-        li {
-            margin-bottom: 12px;
-            line-height: 1.85;
-            color: var(--text-secondary);
-        }
-
-        /* Tables */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 30px 0;
+            margin: 25px 0;
             background-color: white;
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
 
         table thead {
@@ -306,1011 +195,1011 @@
             color: white;
         }
 
-        table th {
-            padding: 18px;
-            text-align: left;
-            font-weight: 600;
-            font-family: 'Segoe UI', sans-serif;
-            border-bottom: 2px solid var(--light-accent);
-        }
-
-        table td {
-            padding: 15px 18px;
+        table th, table td {
+            padding: 14px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
-            font-size: 0.98em;
         }
 
         table tr:hover {
             background-color: #f9fbfc;
         }
 
-        table tr:last-child td {
-            border-bottom: none;
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 18px;
         }
 
-        /* Comparison boxes */
-        .comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin: 30px 0;
+        li {
+            margin-bottom: 10px;
+            line-height: 1.85;
         }
 
-        .comparison-box {
-            background: linear-gradient(135deg, rgba(108, 142, 191, 0.08) 0%, rgba(184, 202, 224, 0.08) 100%);
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .exam-section {
+            background: linear-gradient(135deg, #ff6f00 0%, #ff8f00 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 8px;
+            margin: 50px 0;
+        }
+
+        .exam-section h2 {
+            color: white;
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .question {
+            background: white;
+            color: var(--text-primary);
             padding: 25px;
+            margin: 20px 0;
             border-radius: 6px;
-            border: 1px solid var(--light-accent);
-            border-left: 4px solid var(--accent);
+            border-left: 5px solid var(--secondary);
         }
 
-        .comparison-box h4 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            margin-top: 0;
+        .answer {
+            background: #e8f5e9;
+            padding: 25px;
+            margin: 15px 0;
+            border-radius: 6px;
+            border-left: 5px solid var(--success);
         }
 
-        .comparison-box ul {
-            margin-left: 20px;
+        .answer strong {
+            color: var(--success);
         }
 
-        .comparison-box li {
-            font-size: 0.95em;
-        }
-
-        /* Highlight */
-        .highlight {
-            background-color: #fef3c7;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-weight: 600;
-            color: var(--primary);
-            font-style: italic;
-        }
-
-        /* Footer */
         footer {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            text-align: center;
-            padding: 50px 30px;
-            margin-top: 80px;
             color: white;
-            border-top: 5px solid var(--accent);
+            text-align: center;
+            padding: 40px 30px;
+            margin-top: 60px;
         }
 
         footer p {
             color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 10px;
-            text-align: center;
+            margin-bottom: 8px;
         }
 
-        .references {
-            font-size: 0.9em;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        .toc {
+            background: linear-gradient(135deg, rgba(79, 195, 247, 0.1) 0%, rgba(13, 71, 161, 0.1) 100%);
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            border: 2px solid var(--light-accent);
         }
 
-        .reference-item {
-            margin: 8px 0;
-            font-style: italic;
-            opacity: 0.85;
+        .toc h2 {
+            margin-top: 0;
         }
 
-        /* Responsive */
+        .badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .badge.fundamental {
+            background: var(--success);
+        }
+
+        .badge.important {
+            background: var(--warning);
+        }
+
         @media (max-width: 768px) {
             header h1 {
-                font-size: 2em;
+                font-size: 1.8em;
             }
-
-            header .subtitle {
-                font-size: 1.1em;
-            }
-
             section {
-                padding: 30px 20px;
-            }
-
-            section h2 {
-                font-size: 1.7em;
-            }
-
-            section h3 {
-                font-size: 1.3em;
-            }
-
-            .container {
-                padding: 30px 15px;
-            }
-
-            .comparison {
-                grid-template-columns: 1fr;
-            }
-
-            .toc {
                 padding: 25px;
             }
-
             nav ul {
                 flex-direction: column;
             }
-
-            nav li {
-                min-width: unset;
-            }
-
-            nav a {
-                padding: 15px 10px;
-                font-size: 0.9em;
-            }
-
-            table {
-                font-size: 0.9em;
-            }
-
-            table th, table td {
-                padding: 12px 10px;
-            }
-        }
-
-        /* MathJax styling */
-        .MathJax {
-            outline: none !important;
         }
 
         mjx-container {
             overflow: auto;
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
-        /* Badge styles */
-        .section-number {
-            display: inline-block;
-            background: var(--accent);
-            color: white;
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            line-height: 35px;
-            text-align: center;
-            margin-right: 10px;
-            font-weight: 700;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        /* Divider */
-        .divider {
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--light-accent), transparent);
-            margin: 40px 0;
-        }
-
-        /* Info box */
-        .info-box {
-            background: linear-gradient(135deg, rgba(33, 150, 243, 0.08) 0%, rgba(100, 181, 246, 0.08) 100%);
-            border-left: 4px solid #2196F3;
+        .derivation {
+            background: #f3e5f5;
+            border-left: 4px solid #7b1fa2;
             padding: 20px;
-            border-radius: 6px;
             margin: 20px 0;
-            font-size: 0.95em;
-            color: var(--text-secondary);
+            border-radius: 5px;
         }
 
-        .info-box strong {
-            color: #1565c0;
+        .key-insight {
+            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+            border-left: 4px solid #0277bd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Guía Exhaustiva de Machine Learning</h1>
-        <p class="subtitle">Desde Aprendizaje por Refuerzo hasta Redes Neuronales Profundas</p>
-        <div class="authors">
-            <strong>Basada en:</strong> Sutton & Barto (RL), Hastie et al. (Statistical Learning),
-            Goodfellow et al. (Deep Learning), Cristianini & Shawe-Taylor (Kernel Methods)
-        </div>
+        <h1>🎓 RL Mastery: Curso Completo Basado en Sutton & Barto</h1>
+        <p>Desde Fundamentos Matemáticos hasta Algoritmos Avanzados de Aprendizaje por Refuerzo</p>
+        <p style="font-size: 0.95em; margin-top: 15px;"><strong>Referencia:</strong> Sutton, R. S., & Barto, A. G. (2018). Reinforcement Learning: An Introduction (2nd ed.). MIT Press.</p>
     </header>
 
     <nav>
         <ul>
-            <li><a href="#rl">1. Reinforcement Learning</a></li>
-            <li><a href="#perceptron">2. Perceptrón</a></li>
-            <li><a href="#svm">3. SVM</a></li>
-            <li><a href="#kernels">4. Kernels</a></li>
-            <li><a href="#deep">5. Deep Learning</a></li>
+            <li><a href="#fundamentos">📐 Fundamentos</a></li>
+            <li><a href="#intro-rl">🎮 Introducción RL</a></li>
+            <li><a href="#mdp">🔄 MDPs</a></li>
+            <li><a href="#bellman">📊 Bellman</a></li>
+            <li><a href="#qlearning">🤖 Q-Learning</a></li>
+            <li><a href="#examen">✍️ Entrenamiento</a></li>
         </ul>
     </nav>
 
     <div class="container">
-        <!-- TABLE OF CONTENTS -->
         <div class="toc">
-            <h2>📚 Tabla de Contenidos</h2>
-            <ol>
-                <li><strong>Aprendizaje por Refuerzo (RL):</strong> MDPs, Ecuaciones de Bellman, Q-Learning, Control vs Predicción</li>
-                <li><strong>Clasificación Lineal - Perceptrón:</strong> Algoritmo, Convergencia, Aplicación Manual</li>
-                <li><strong>SVM - Máquinas de Vectores de Soporte:</strong> Margen Máximo, KKT, Hinge Loss</li>
-                <li><strong>Kernels y Truco del Kernel:</strong> Polinomiales, RBF, Margen Suave/Duro</li>
-                <li><strong>Aprendizaje Profundo:</strong> Backpropagation, SGD, ReLU, Dimensionalidad</li>
-            </ol>
+            <h2>📚 Estructura del Curso</h2>
+            <p><strong>Parte I: Fundamentos (Necesario para entender TODO)</strong></p>
+            <ul style="margin-top: 10px;">
+                <li>Probabilidad y Variables Aleatorias</li>
+                <li>Álgebra Lineal Esencial</li>
+                <li>Cálculo y Gradientes</li>
+            </ul>
+            <p style="margin-top: 15px;"><strong>Parte II: Aprendizaje por Refuerzo (Capítulos 1-5 de S&B)</strong></p>
+            <ul style="margin-top: 10px;">
+                <li>Introducción y Conceptos Clave</li>
+                <li>Procesos de Decisión de Markov (MDPs)</li>
+                <li>Ecuaciones de Bellman</li>
+                <li>Q-Learning y Métodos sin Modelo</li>
+            </ul>
+            <p style="margin-top: 15px;"><strong>Parte III: Entrenamiento para Examen</strong></p>
+            <ul style="margin-top: 10px;">
+                <li>5 Problemas Completos Resueltos</li>
+                <li>Respuestas Profesionales y Detalladas</li>
+            </ul>
         </div>
 
-        <!-- SECTION 1: REINFORCEMENT LEARNING -->
-        <section id="rl">
-            <h2><span class="section-number">1</span> Aprendizaje por Refuerzo: Procesos de Decisión Secuencial</h2>
+        <!-- SECTION 1: FUNDAMENTOS MATEMÁTICOS -->
+        <section id="fundamentos">
+            <h2>📐 PARTE I: Fundamentos Matemáticos Esenciales</h2>
 
-            <h3>Fundamentos: RL vs Aprendizaje Supervisado</h3>
-
-            <div class="concept">
-                <p><strong>Aprendizaje por Refuerzo (RL)</strong> es un paradigma donde un <em>agente</em> aprende a tomar decisiones secuenciales interactuando con un <em>entorno</em>, recibiendo señales de recompensa que guían su aprendizaje hacia el objetivo de maximizar la recompensa acumulada a largo plazo.</p>
+            <div class="note">
+                <strong>⚠️ Importante:</strong> Esta sección es <strong>crítica</strong>. Cada concepto aquí es requerido para entender RL. No saltees nada.
             </div>
 
-            <div class="comparison">
-                <div class="comparison-box">
-                    <h4>📊 Aprendizaje Supervisado</h4>
-                    <ul>
-                        <li>Datos etiquetados: \((x_i, y_i)\)</li>
-                        <li>Mapeo directo entrada → salida</li>
-                        <li>Retroalimentación inmediata</li>
-                        <li>Datos estáticos predefinidos</li>
-                        <li>Ejemplos: Clasificación, Regresión</li>
-                    </ul>
-                </div>
-                <div class="comparison-box">
-                    <h4>🎮 Aprendizaje por Refuerzo</h4>
-                    <ul>
-                        <li>Sin etiquetas explícitas</li>
-                        <li>Aprendizaje por prueba y error</li>
-                        <li>Recompensas retrasadas y escasas</li>
-                        <li>Genera datos mediante interacción</li>
-                        <li>Ejemplos: Robótica, Juegos, Control</li>
-                    </ul>
-                </div>
+            <h3>1.1 Probabilidad: Variables Aleatorias y Esperanza</h3>
+
+            <p>En RL, trabajamos constantemente con incertidumbre. El entorno es estocástico (aleatorio). Necesitas entender probabilidad completamente.</p>
+
+            <h4>Variable Aleatoria</h4>
+
+            <div class="definition">
+                <strong>Definición:</strong> Una variable aleatoria $X$ es una función que asigna un valor numérico a cada resultado de un experimento aleatorio. Si es discreta, asume valores en un conjunto finito o numerable.
+
+                <p style="margin-top: 15px;"><strong>Ejemplo:</strong> Lanzar un dado. $X$ puede ser {1, 2, 3, 4, 5, 6}. Cada valor tiene probabilidad $P(X=k) = \frac{1}{6}$ para $k \in \{1,\ldots,6\}$.</p>
             </div>
 
-            <h3>Procesos de Decisión de Markov (MDPs)</h3>
+            <h4>Distribución de Probabilidad</h4>
 
-            <p>Un MDP formaliza un problema de decisión secuencial como una tupla de cinco componentes:</p>
-
-            <div class="formula">
-                $$\mathcal{M} = \langle S, A, P, R, \gamma \rangle$$
+            <div class="formula-block">
+                $$P(X=x) = p(x)$$
+                $$\sum_x P(X=x) = 1 \quad \text{(normalización)}$$
             </div>
 
-            <div class="concept">
+            <div class="explanation">
+                <strong>¿Por qué esto importa en RL?</strong> El entorno tiene una dinámica probabilística. Cuando ejecutas una acción $a$ en estado $s$, el siguiente estado $s'$ es aleatorio con probabilidad $P(s'|s,a)$.
+            </div>
+
+            <h4>Esperanza (Media Esperada)</h4>
+
+            <div class="formula-block theorem">
+                $$\mathbb{E}[X] = \sum_x x \cdot P(X=x)$$
+            </div>
+
+            <div class="step">
+                <strong>Interpretación intuitiva:</strong> Es el "valor promedio" si repites el experimento infinitas veces.
+
+                <p style="margin-top: 12px;"><strong>Ejemplo:</strong> Dado justo. $\mathbb{E}[X] = 1 \cdot \frac{1}{6} + 2 \cdot \frac{1}{6} + \cdots + 6 \cdot \frac{1}{6} = \frac{21}{6} = 3.5$</p>
+            </div>
+
+            <h4>Esperanza Condicional</h4>
+
+            <div class="formula-block">
+                $$\mathbb{E}[X|Y=y] = \sum_x x \cdot P(X=x|Y=y)$$
+            </div>
+
+            <div class="explanation">
+                <strong>En RL:</strong> La recompensa esperada después de tomar acción $a$ en estado $s$ es:
+                $$\mathbb{E}[R|S=s, A=a] = \sum_r r \cdot P(R=r|S=s, A=a)$$
+            </div>
+
+            <h3>1.2 Álgebra Lineal: Vectores y Matrices</h3>
+
+            <h4>Vectores en $\mathbb{R}^d$</h4>
+
+            <div class="definition">
+                Un vector $\mathbf{x} \in \mathbb{R}^d$ es una columna de $d$ números reales:
+                $$\mathbf{x} = \begin{pmatrix} x_1 \\ x_2 \\ \vdots \\ x_d \end{pmatrix}$$
+
+                <p style="margin-top: 15px;"><strong>Ejemplo en RL:</strong> Un estado podría ser $s = (posición, velocidad) \in \mathbb{R}^2$.</p>
+            </div>
+
+            <h4>Producto Punto (Dot Product)</h4>
+
+            <div class="formula-block">
+                $$\mathbf{x} \cdot \mathbf{y} = \sum_{i=1}^d x_i y_i$$
+            </div>
+
+            <div class="step">
+                <strong>Propiedades:</strong>
                 <ul>
-                    <li>\(\mathbf{S}\): Conjunto de <strong>estados</strong> — todas las configuraciones posibles del entorno</li>
-                    <li>\(\mathbf{A}\): Conjunto de <strong>acciones</strong> disponibles para el agente</li>
-                    <li>\(\mathbf{P}(s' \mid s,a) = \Pr[S_{t+1}=s' \mid S_t=s, A_t=a]\): Dinámica del entorno (probabilidad de transición)</li>
-                    <li>\(\mathbf{R}(s,a,s')\): Función de recompensa inmediata</li>
-                    <li>\(\boldsymbol{\gamma} \in [0,1]\): <strong>Factor de descuento</strong> — importancia relativa de recompensas futuras</li>
+                    <li>Conmutativo: $\mathbf{x} \cdot \mathbf{y} = \mathbf{y} \cdot \mathbf{x}$</li>
+                    <li>Distributivo: $\mathbf{x} \cdot (\mathbf{y} + \mathbf{z}) = \mathbf{x} \cdot \mathbf{y} + \mathbf{x} \cdot \mathbf{z}$</li>
+                    <li>Con escalar: $(\alpha \mathbf{x}) \cdot \mathbf{y} = \alpha (\mathbf{x} \cdot \mathbf{y})$</li>
                 </ul>
+
+                <p style="margin-top: 15px;"><strong>En RL:</strong> Si $\mathbf{\theta}$ es un vector de pesos y $\mathbf{x}$ es un estado, entonces $\mathbf{\theta} \cdot \mathbf{x}$ calcula el valor estimado del estado.</p>
             </div>
 
-            <div class="key-point">
-                <strong>🔑 Propiedad de Markov:</strong> El futuro depende únicamente del estado presente \(s_t\), no de toda la historia \((s_0, a_0, r_1, \ldots, s_{t-1})\). Esta propiedad fundamental hace que los MDPs sean computacionalmente manejables y permite la programación dinámica.
+            <h4>Norma Euclidiana</h4>
+
+            <div class="formula-block">
+                $$\|\mathbf{x}\| = \sqrt{\mathbf{x} \cdot \mathbf{x}} = \sqrt{\sum_{i=1}^d x_i^2}$$
             </div>
 
-            <h3>Ecuaciones de Bellman: La Recursividad del Valor</h3>
-
-            <p>Las ecuaciones de Bellman descomponen el valor de un estado en la recompensa inmediata más el valor esperado futuro:</p>
-
-            <div class="formula">
-                $$V^\pi(s) = \mathbb{E}_\pi\left[R_{t+1} + \gamma V^\pi(S_{t+1}) \mid S_t = s\right]$$
-                $$= \sum_a \pi(a \mid s) \sum_{s',r} P(s',r \mid s,a) \left[r + \gamma V^\pi(s')\right]$$
+            <div class="explanation">
+                La norma mide la "magnitud" o "longitud" del vector. Es fundamental para entender márgenes en SVM.
             </div>
 
-            <p style="margin-top: 25px;">Para la función de valor de acción (Q-function):</p>
+            <h3>1.3 Cálculo: Derivadas y Gradientes</h3>
 
-            <div class="formula">
-                $$Q^\pi(s,a) = \mathbb{E}_\pi\left[R_{t+1} + \gamma Q^\pi(S_{t+1}, A_{t+1}) \mid S_t=s, A_t=a\right]$$
+            <h4>Derivada Parcial</h4>
+
+            <div class="formula-block">
+                $$\frac{\partial f}{\partial x_i} = \lim_{h \to 0} \frac{f(x_1, \ldots, x_i + h, \ldots, x_d) - f(x_1, \ldots, x_i, \ldots, x_d)}{h}$$
             </div>
 
-            <div class="info-box">
-                <strong>💡 Importancia:</strong> La ecuación de Bellman permite resolver el problema mediante <strong>iteración</strong>. En lugar de computar todo el futuro, establecemos una relación recursiva entre valores de estados consecutivos.
+            <div class="step">
+                <strong>Significado:</strong> Mide cómo cambia $f$ cuando cambias solo la variable $x_i$ un poco.
+
+                <p style="margin-top: 12px;"><strong>Ejemplo:</strong> Si $f(x, y) = 3x^2 + 2xy + y$, entonces $\frac{\partial f}{\partial x} = 6x + 2y$ y $\frac{\partial f}{\partial y} = 2x + 1$.</p>
             </div>
 
-            <h3>Q-Learning: Aprendizaje Off-Policy</h3>
+            <h4>Gradiente</h4>
 
-            <p>Q-Learning es un algoritmo de aprendizaje por refuerzo que estima la función Q óptima \(Q^*(s,a)\) sin necesidad de conocer la política óptima durante el aprendizaje.</p>
-
-            <div class="formula">
-                $$Q(s,a) \leftarrow Q(s,a) + \alpha \left[ r + \gamma \max_{a'} Q(s',a') - Q(s,a) \right]$$
+            <div class="formula-block theorem">
+                $$\nabla f(\mathbf{x}) = \begin{pmatrix} \frac{\partial f}{\partial x_1} \\ \frac{\partial f}{\partial x_2} \\ \vdots \\ \frac{\partial f}{\partial x_d} \end{pmatrix}$$
             </div>
 
-            <div class="key-point">
-                <strong>🎯 ¿Por qué es Off-Policy?</strong>
-                <ul style="margin-top: 15px;">
-                    <li><strong>Política de comportamiento:</strong> El agente sigue una política de <em>exploración</em> (e.g., \(\varepsilon\)-greedy) para generar experiencias</li>
-                    <li><strong>Política objetivo:</strong> Pero actualiza los Q-values basándose en el máximo Q futuro (política greedy)</li>
-                    <li><strong>Desacoplamiento:</strong> Las acciones tomadas y las acciones de las que aprendemos son diferentes</li>
-                    <li><strong>Eficiencia:</strong> Permite balancear exploración vs explotación de manera óptima</li>
-                </ul>
+            <div class="key-insight">
+                <strong>Interpretación crucial:</strong> El gradiente $\nabla f$ apunta en la dirección de máximo crecimiento de $f$. Si quieres minimizar $f$ (como en ML), debes ir en la dirección opuesta: $\mathbf{x}_{\text{nuevo}} = \mathbf{x} - \alpha \nabla f(\mathbf{x})$ (descenso de gradiente).
             </div>
 
-            <h3>Problemas de Predicción vs Control</h3>
+            <h4>Regla de la Cadena (Backpropagation)</h4>
+
+            <div class="formula-block">
+                $$\frac{df}{dt} = \frac{\partial f}{\partial \mathbf{x}} \cdot \frac{d\mathbf{x}}{dt}$$
+            </div>
+
+            <div class="explanation">
+                <strong>En RL neural:</strong> Para actualizar los pesos de una red, usas backpropagation que aplica recursivamente la regla de la cadena desde la salida hacia atrás.
+            </div>
+
+            <div class="divider" style="height: 2px; background: var(--border-color); margin: 40px 0;"></div>
+        </section>
+
+        <!-- SECTION 2: INTRODUCCIÓN A RL -->
+        <section id="intro-rl">
+            <h2>🎮 PARTE II: Aprendizaje por Refuerzo (Sutton & Barto, Cap. 1-2)</h2>
+
+            <h3>2.1 ¿Qué es Aprendizaje por Refuerzo?</h3>
+
+            <div class="definition">
+                <strong>Definición (Sutton & Barto):</strong> El aprendizaje por refuerzo es un marco de aprendizaje donde un <strong>agente</strong> interactúa con un <strong>entorno</strong>, recibiendo estados y recompensas, con el objetivo de aprender una <strong>política</strong> que maximice la recompensa acumulada a lo largo del tiempo.
+            </div>
+
+            <h4>Componentes Clave</h4>
+
+            <div class="step">
+                <ol>
+                    <li><strong>Agente:</strong> Entidad que aprende y toma decisiones</li>
+                    <li><strong>Entorno:</strong> Todo aquello externo al agente con el que interactúa</li>
+                    <li><strong>Estado $s \in S$:</strong> Descripción de la situación actual</li>
+                    <li><strong>Acción $a \in A$:</strong> Lo que el agente puede hacer</li>
+                    <li><strong>Recompensa $r \in \mathbb{R}$:</strong> Señal de retroalimentación inmediata</li>
+                    <li><strong>Política $\pi(a|s)$:</strong> Estrategia que mapea estados a acciones</li>
+                </ol>
+            </div>
+
+            <h4>Loop de Interacción</h4>
+
+            <div class="formula-block">
+                En cada paso de tiempo $t$:
+                <ol>
+                    <li>Agente observa estado $S_t$</li>
+                    <li>Agente ejecuta acción $A_t \sim \pi(\cdot | S_t)$</li>
+                    <li>Entorno devuelve recompensa $R_{t+1}$ y nuevo estado $S_{t+1}$</li>
+                </ol>
+            </div>
+
+            <h3>2.2 Diferencias con Aprendizaje Supervisado</h3>
 
             <table>
                 <thead>
                     <tr>
-                        <th>Dimensión</th>
+                        <th>Aspecto</th>
+                        <th>Aprendizaje Supervisado</th>
+                        <th>Aprendizaje por Refuerzo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Datos</strong></td>
+                        <td>Etiquetas correctas $(x, y)$ dadas</td>
+                        <td>Solo recompensas $r$ (señal débil)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Feedback</strong></td>
+                        <td>Inmediato después de cada predicción</td>
+                        <td>Retrasado, después de varios pasos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Exploración</strong></td>
+                        <td>No necesaria</td>
+                        <td>Esencial para aprender</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Datos generados por</strong></td>
+                        <td>Humanos que etiquetan</td>
+                        <td>El agente interactuando</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="divider" style="height: 2px; background: var(--border-color); margin: 40px 0;"></div>
+        </section>
+
+        <!-- SECTION 3: MDPs -->
+        <section id="mdp">
+            <h2>🔄 PARTE II.2: Procesos de Decisión de Markov (MDPs)</h2>
+
+            <h3>3.1 Definición Formal de un MDP</h3>
+
+            <div class="formula-block theorem">
+                Un MDP está completamente caracterizado por:
+                $$\mathcal{M} = (S, A, P, R, \gamma)$$
+
+                Donde:
+                <ul style="margin-top: 15px;">
+                    <li>$S$: conjunto finito de estados</li>
+                    <li>$A$: conjunto finito de acciones</li>
+                    <li>$P(s'|s,a) = \Pr[S_{t+1} = s' | S_t = s, A_t = a]$: dinámica de transición</li>
+                    <li>$R(s,a,s') = \mathbb{E}[R_{t+1} | S_t=s, A_t=a, S_{t+1}=s']$: función de recompensa esperada</li>
+                    <li>$\gamma \in [0,1]$: factor de descuento</li>
+                </ul>
+            </div>
+
+            <h3>3.2 Propiedad de Markov</h3>
+
+            <div class="definition">
+                <strong>Propiedad de Markov:</strong> El futuro es independiente del pasado dado el presente:
+                $$P(S_{t+1} | S_t, A_t, S_{t-1}, A_{t-1}, \ldots) = P(S_{t+1} | S_t, A_t)$$
+
+                <p style="margin-top: 15px;">Esto significa que el estado $S_t$ contiene toda la información necesaria para tomar la decisión óptima.</p>
+            </div>
+
+            <div class="key-insight">
+                <strong>¿Por qué es crítico?</strong> Sin la propiedad de Markov, no podrías resolver RL eficientemente. Tendrías que recordar toda la historia, lo cual es computacionalmente prohibitivo.
+            </div>
+
+            <h3>3.3 Horizonte y Retorno</h3>
+
+            <h4>Retorno (Return)</h4>
+
+            <div class="formula-block">
+                $$G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1}$$
+            </div>
+
+            <div class="step">
+                <strong>¿Qué representa?</strong> La recompensa acumulada futura desde el paso $t$.
+
+                <strong>Factor de descuento $\gamma$:</strong>
+                <ul>
+                    <li>$\gamma = 0$: Solo importa la recompensa inmediata $R_{t+1}$</li>
+                    <li>$\gamma = 1$: Todas las recompensas futuras son igualmente importantes</li>
+                    <li>$0 < \gamma < 1$: Balance entre inmediato y futuro (típicamente $\gamma \approx 0.99$)</li>
+                </ul>
+
+                <p style="margin-top: 12px;"><strong>¿Por qué descuentar?</strong> Tres razones:</p>
+                <ol>
+                    <li>Recompensas futuras son menos ciertas que inmediatas</li>
+                    <li>Matemáticamente, garantiza que la serie converja</li>
+                    <li>Biológicamente, los agentes prefieren recompensas cercanas (impaciencia)</li>
+                </ol>
+            </div>
+
+            <div class="divider" style="height: 2px; background: var(--border-color); margin: 40px 0;"></div>
+        </section>
+
+        <!-- SECTION 4: BELLMAN -->
+        <section id="bellman">
+            <h2>📊 PARTE II.3: Ecuaciones de Bellman (Fundación de RL)</h2>
+
+            <div class="note">
+                <strong>🔑 Crítico:</strong> Las ecuaciones de Bellman son el corazón matemático de RL. Cada algoritmo RL las usa, directa o indirectamente.
+            </div>
+
+            <h3>4.1 Función de Valor de Estado $V^\pi(s)$</h3>
+
+            <div class="formula-block theorem">
+                $$V^\pi(s) = \mathbb{E}_\pi[G_t | S_t = s] = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \big| S_t=s\right]$$
+            </div>
+
+            <div class="explanation">
+                <strong>¿Qué es?</strong> El valor esperado de todas las recompensas futuras si:
+                <ul>
+                    <li>Comienzas en estado $s$</li>
+                    <li>Sigues la política $\pi$ (que dice qué acción tomar en cada estado)</li>
+                </ul>
+
+                <p style="margin-top: 15px;"><strong>Ejemplo:</strong> Si $s$ es "estar en casa" y $\pi$ siempre te dice "ve al café", entonces $V^\pi(s)$ es la recompensa total (café + viajes + lo que hagas después en el café, descontado).</p>
+            </div>
+
+            <h3>4.2 Ecuación de Bellman para $V^\pi(s)$</h3>
+
+            <div class="derivation">
+                <strong>Derivación:</strong>
+
+                <p style="margin-top: 15px;">Comenzamos con la definición:</p>
+                $$V^\pi(s) = \mathbb{E}_\pi[G_t | S_t=s]$$
+
+                <p style="margin-top: 15px;">Expandimos $G_t$ como recompensa inmediata + futuro descontado:</p>
+                $$G_t = R_{t+1} + \gamma G_{t+1}$$
+
+                <p style="margin-top: 15px;">Tomando esperanza:</p>
+                $$V^\pi(s) = \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} | S_t=s]$$
+
+                <p style="margin-top: 15px;">Por linealidad de la esperanza:</p>
+                $$V^\pi(s) = \mathbb{E}_\pi[R_{t+1}|S_t=s] + \gamma \mathbb{E}_\pi[G_{t+1}|S_t=s]$$
+
+                <p style="margin-top: 15px;">Pero $\mathbb{E}_\pi[G_{t+1}|S_t=s] = \mathbb{E}_{S_{t+1}}[V^\pi(S_{t+1})|S_t=s]$, entonces:</p>
+                $$V^\pi(s) = \mathbb{E}_\pi[R_{t+1}|S_t=s] + \gamma \mathbb{E}_\pi[V^\pi(S_{t+1})|S_t=s]$$
+            </div>
+
+            <div class="formula-block theorem">
+                <strong>Ecuación de Bellman para $V^\pi(s)$:</strong>
+                $$V^\pi(s) = \sum_a \pi(a|s) \sum_{s',r} P(s',r|s,a)[r + \gamma V^\pi(s')]$$
+            </div>
+
+            <div class="key-insight">
+                <strong>Interpretación:</strong> El valor de un estado es:
+                1. La recompensa inmediata esperada $r$
+                2. Más el valor descontado del siguiente estado $\gamma V^\pi(s')$
+
+                Esto es una relación recursiva: puedes calcular $V(s)$ en términos de $V(s')$.
+            </div>
+
+            <h3>4.3 Función de Valor de Acción $Q^\pi(s,a)$</h3>
+
+            <div class="formula-block theorem">
+                $$Q^\pi(s,a) = \mathbb{E}_\pi[G_t | S_t=s, A_t=a]$$
+            </div>
+
+            <div class="explanation">
+                <strong>¿Qué es?</strong> El valor esperado de todas las recompensas futuras si:
+                <ul>
+                    <li>Comienzas en estado $s$</li>
+                    <li>Ejecutas acción $a$ (solo esa vez)</li>
+                    <li>Luego sigues política $\pi$</li>
+                </ul>
+            </div>
+
+            <h4>Ecuación de Bellman para $Q^\pi(s,a)$</h4>
+
+            <div class="formula-block theorem">
+                $$Q^\pi(s,a) = \sum_{s',r} P(s',r|s,a)[r + \gamma \sum_{a'} \pi(a'|s') Q^\pi(s',a')]$$
+            </div>
+
+            <h3>4.4 Política Óptima y Ecuaciones de Bellman Óptimas</h3>
+
+            <div class="definition">
+                <strong>Política Óptima $\pi^*$:</strong> La política que maximiza el valor esperado:
+                $$\pi^* = \arg\max_\pi V^\pi(s) \text{ para todo } s$$
+
+                <p style="margin-top: 15px;"><strong>Funciones de valor óptimas:</strong></p>
+                $$V^*(s) = \max_\pi V^\pi(s) = \max_a Q^*(s,a)$$
+                $$Q^*(s,a) = \sum_{s',r} P(s',r|s,a)[r + \gamma \max_{a'} Q^*(s',a')]$$
+            </div>
+
+            <div class="formula-block theorem">
+                <strong>Ecuación de Bellman Óptima (fundamental):</strong>
+                $$Q^*(s,a) = \mathbb{E}_{s',r \sim P(\cdot | s,a)}\left[r + \gamma \max_{a'} Q^*(s', a')\right]$$
+            </div>
+
+            <div class="key-insight">
+                <strong>¿Por qué es revolucionaria esta ecuación?</strong>
+
+                <p>Si pudieras calcular $Q^*(s,a)$ para todos los $(s,a)$ pares, podrías obtener la política óptima simplemente:</p>
+                $$\pi^*(s) = \arg\max_a Q^*(s,a)$$
+
+                <p>Los algoritmos RL como Q-Learning están diseñados específicamente para estimar $Q^*(s,a)$ usando esta ecuación.</p>
+            </div>
+
+            <div class="divider" style="height: 2px; background: var(--border-color); margin: 40px 0;"></div>
+        </section>
+
+        <!-- SECTION 5: Q-LEARNING -->
+        <section id="qlearning">
+            <h2>🤖 PARTE II.4: Q-Learning y Métodos sin Modelo</h2>
+
+            <h3>5.1 El Problema: No Conocemos P y R</h3>
+
+            <div class="explanation">
+                En la práctica, no conocemos:
+                <ul>
+                    <li>$P(s'|s,a)$: Dinámica del entorno</li>
+                    <li>$R(s,a,s')$: Función de recompensa verdadera</li>
+                </ul>
+
+                <p style="margin-top: 15px;">Solo podemos <strong>muestrear</strong> experiencias $(s, a, r, s')$ interactuando.</p>
+
+                <p style="margin-top: 15px;"><strong>Solución:</strong> Q-Learning aprende $Q^*$ directamente de experiencias, sin modelo.</p>
+            </div>
+
+            <h3>5.2 Algoritmo Q-Learning</h3>
+
+            <div class="formula-block theorem">
+                <strong>Actualización Q-Learning:</strong>
+                $$Q(s,a) \leftarrow Q(s,a) + \alpha [r + \gamma \max_{a'} Q(s',a') - Q(s,a)]$$
+            </div>
+
+            <div class="step">
+                <strong>Componentes de la fórmula:</strong>
+
+                <ol>
+                    <li>$\alpha \in (0, 1)$: **Tasa de aprendizaje** (qué tan rápido actualizar)</li>
+                    <li>$r$: Recompensa observada</li>
+                    <li>$\gamma \max_{a'} Q(s',a')$: Estimación del valor futuro</li>
+                    <li>$r + \gamma \max_{a'} Q(s',a') - Q(s,a)$: **Error TD** (Temporal Difference)</li>
+                </ol>
+
+                <p style="margin-top: 15px;"><strong>¿Qué hace?</strong> Ajusta $Q(s,a)$ en dirección del "objetivo": $r + \gamma \max_{a'} Q(s',a')$</p>
+            </div>
+
+            <h4>Derivación del Algoritmo</h4>
+
+            <div class="derivation">
+                <p>Ecuación de Bellman óptima:</p>
+                $$Q^*(s,a) = \mathbb{E}[R + \gamma \max_{a'} Q^*(s',a') | s,a]$$
+
+                <p style="margin-top: 15px;">Q-Learning estima esto muestreando una experiencia $(s,a,r,s')$:</p>
+                $$Q(s,a) \approx r + \gamma \max_{a'} Q(s',a')$$
+
+                <p style="margin-top: 15px;">Pero no reemplazamos completamente (sería inestable). En lugar de eso, hacemos una actualización iterativa (stochastic approximation):</p>
+                $$Q(s,a) \leftarrow (1-\alpha) Q(s,a) + \alpha [r + \gamma \max_{a'} Q(s',a')]$$
+
+                <p style="margin-top: 15px;">Reordenando:</p>
+                $$Q(s,a) \leftarrow Q(s,a) + \alpha [r + \gamma \max_{a'} Q(s',a') - Q(s,a)]$$
+            </div>
+
+            <h3>5.3 ¿Por Qué Q-Learning es Off-Policy?</h3>
+
+            <div class="definition">
+                <strong>On-Policy:</strong> Aprendes evaluando la política que usas para explorar.
+
+                <p style="margin-top: 15px;"><strong>Off-Policy:</strong> Aprendes evaluando una política diferente a la que usas para explorar.</p>
+            </div>
+
+            <div class="key-insight">
+                <strong>Q-Learning es off-policy porque:</strong>
+
+                <ol>
+                    <li><strong>Política de comportamiento:</strong> Usas una política de exploración (e.g., $\varepsilon$-greedy) para generar experiencias</li>
+                    <li><strong>Política objetivo:</strong> Pero aprendes la política <strong>greedy</strong> que usa $\max_{a'} Q(s',a')$</li>
+                    <li><strong>Desacoplamiento:</strong> Las acciones que tomas no tienen que ser óptimas; aún así aprendes la política óptima</li>
+                </ol>
+
+                <p style="margin-top: 15px;"><strong>Ventaja:</strong> Puedes explorar activamente (tomar acciones no óptimas) mientras aprendes la política óptima. Esto es crucial para encontrar buenas soluciones.</p>
+            </div>
+
+            <h4>Comparación: On-Policy (SARSA) vs Off-Policy (Q-Learning)</h4>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aspecto</th>
+                        <th>Q-Learning (Off-Policy)</th>
+                        <th>SARSA (On-Policy)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Actualización</strong></td>
+                        <td>$$Q(s,a) \leftarrow Q(s,a) + \alpha[r + \gamma \max_{a'} Q(s',a') - Q(s,a)]$$</td>
+                        <td>$$Q(s,a) \leftarrow Q(s,a) + \alpha[r + \gamma Q(s',a') - Q(s,a)]$$</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Política aprendida</strong></td>
+                        <td>Óptima (greedy en $Q^*$)</td>
+                        <td>Igual a la de exploración</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Eficiencia</strong></td>
+                        <td>Más eficiente (sample-efficient)</td>
+                        <td>Menos eficiente</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Seguridad</strong></td>
+                        <td>Puede ser arriesgado (explora mucho)</td>
+                        <td>Más seguro (evalúa mientras aprende)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>5.4 Convergencia de Q-Learning</h3>
+
+            <div class="formula-block theorem">
+                <strong>Teorema (Watkins & Dayan, 1992):</strong> Q-Learning converge a $Q^*$ si:
+                <ul style="margin-top: 15px;">
+                    <li>Cada par $(s,a)$ es visitado infinitamente a menudo</li>
+                    <li>$\sum_t \alpha_t(s,a) = \infty$ pero $\sum_t \alpha_t^2(s,a) < \infty$ (típicamente $\alpha_t = \frac{1}{t}$)</li>
+                </ul>
+            </div>
+
+            <h3>5.5 Diferencia entre Control y Predicción</h3>
+
+            <table>
+                <thead>
+                    <tr>
                         <th>Predicción</th>
                         <th>Control</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Objetivo</strong></td>
-                        <td>Estimar \(V^\pi(s)\) bajo política fija \(\pi\)</td>
-                        <td>Encontrar política óptima \(\pi^*\)</td>
+                        <td><strong>Objetivo:</strong> Estimar $V^\pi(s)$ o $Q^\pi(s,a)$</td>
+                        <td><strong>Objetivo:</strong> Encontrar política óptima $\pi^*$</td>
                     </tr>
                     <tr>
-                        <td><strong>Política</strong></td>
-                        <td>Dada y fija (no cambia)</td>
-                        <td>Mejora iterativa mediante greedy sobre Q</td>
+                        <td><strong>Política:</strong> Dada y fija</td>
+                        <td><strong>Política:</strong> Mejora iterativamente</td>
                     </tr>
                     <tr>
-                        <td><strong>Algoritmos</strong></td>
-                        <td>Monte Carlo, TD(\(\lambda\)), Temporal Difference</td>
-                        <td>Q-Learning, SARSA, Policy Gradient, Actor-Critic</td>
+                        <td><strong>Método:</strong> TD, Monte Carlo</td>
+                        <td><strong>Método:</strong> Q-Learning, Policy Iteration</td>
                     </tr>
                     <tr>
-                        <td><strong>Desafío Principal</strong></td>
-                        <td>Estimación precisa y eficiente de V</td>
-                        <td>Trade-off exploración/explotación óptimo</td>
+                        <td><strong>Actualización:</strong> $$V(s) \leftarrow V(s) + \alpha[r + \gamma V(s') - V(s)]$$</td>
+                        <td><strong>Actualización:</strong> $$Q(s,a) \leftarrow Q(s,a) + \alpha[r + \gamma \max_{a'} Q(s',a') - Q(s,a)]$$</td>
                     </tr>
                 </tbody>
             </table>
 
-            <div class="divider"></div>
+            <div class="divider" style="height: 2px; background: var(--border-color); margin: 40px 0;"></div>
         </section>
 
-        <!-- SECTION 2: PERCEPTRON -->
-        <section id="perceptron">
-            <h2><span class="section-number">2</span> Clasificación Lineal: El Perceptrón</h2>
+        <!-- EXAMEN -->
+        <section id="examen" class="exam-section">
+            <h2>✍️ PARTE III: Entrenamiento Completo para Examen</h2>
+            <p style="margin-top: 15px;">Las 5 preguntas más importantes, con respuestas exhaustivas basadas en Sutton & Barto</p>
+        </section>
 
-            <h3>Fundamentos: El Clasificador Lineal Más Simple</h3>
+        <section>
+            <h2>📝 PROBLEMA 1: Aprendizaje por Refuerzo (2 puntos)</h2>
 
-            <p>El Perceptrón, propuesto por Rosenblatt (1958), es el algoritmo de aprendizaje supervizado más simple para clasificación binaria. Aprende un <strong>hiperplano</strong> que separa dos clases en el espacio de características.</p>
+            <div class="question">
+                <h4>1.1 Objetivo del RL - Selecciona todas las correctas</h4>
 
-            <div class="formula">
-                $$\hat{y} = \text{sign}(\theta \cdot x + \theta_0)$$
-            </div>
-
-            <p style="margin-top: 20px;">Donde \(\theta \in \mathbb{R}^d\) es el vector de pesos y \(\theta_0 \in \mathbb{R}\) es el sesgo (bias).</p>
-
-            <h3>Algoritmo del Perceptrón y Regla de Actualización</h3>
-
-            <div class="concept">
-                <p><strong>Idea central:</strong> Actualizar pesos solo cuando hay error de clasificación, moviendo el hiperplano hacia los puntos mal clasificados.</p>
-
-                <div class="formula" style="margin-top: 20px;">
-                    $$\text{Si } y_i(\theta \cdot x_i + \theta_0) \leq 0: \quad \begin{cases}
-                    \theta &\leftarrow \theta + y_i x_i \\
-                    \theta_0 &\leftarrow \theta_0 + y_i
-                    \end{cases}$$
-                </div>
-
-                <p style="margin-top: 20px;"><strong>Pseudocódigo:</strong></p>
-                <ol style="margin-left: 25px;">
-                    <li>Inicializar \(\theta = \mathbf{0}, \theta_0 = 0\)</li>
-                    <li><strong>Repetir hasta convergencia:</strong>
-                        <ul>
-                            <li>Para cada ejemplo \((x_i, y_i)\) con \(y_i \in \{-1, +1\}\):</li>
-                            <li style="margin-left: 20px;">Si \(y_i(\theta \cdot x_i + \theta_0) \leq 0\): actualizar como arriba</li>
-                        </ul>
-                    </li>
+                <ol type="a">
+                    <li>El objetivo del RL es minimizar la pérdida entre predicciones y etiquetas</li>
+                    <li>El objetivo del RL es aprender una buena política con supervisión nula o limitada</li>
+                    <li>Para que un algoritmo de RL funcione, debe recibir una recompensa distinta de cero después de cada paso</li>
+                    <li>RL funciona maximizando la recompensa para cada siguiente paso inmediato</li>
                 </ol>
             </div>
 
-            <h3>Teorema de Convergencia de Novikoff</h3>
+            <div class="answer">
+                <strong>Respuesta Correcta: (b)</strong>
 
-            <div class="key-point">
-                <p><strong>Teorema (Novikoff, 1962):</strong> Si el conjunto de datos es <span class="highlight">linealmente separable</span> con margen \(\gamma > 0\), el Perceptrón convergerá en un número finito de iteraciones.</p>
+                <p style="margin-top: 15px;"><strong>Justificación detallada:</strong></p>
 
-                <div class="formula" style="margin-top: 20px;">
-                    $$\text{# errores} \leq \left(\frac{R}{\gamma}\right)^2$$
+                <ul style="margin-top: 15px;">
+                    <li><strong>(a) FALSO:</strong> RL no minimiza pérdida entre predicciones y etiquetas como en ML supervisado. No hay "etiquetas correctas" dadas. RL recibe solo recompensas (señal débil e indirecta).</li>
+
+                    <li><strong>(b) VERDADERO:</strong> Esta es la definición precisa de RL según Sutton & Barto. El agente debe aprender a tomar buenas decisiones con poca o ninguna supervisión externa, solo basándose en recompensas.</li>
+
+                    <li><strong>(c) FALSO:</strong> RL funciona con recompensas escasas. De hecho, muchos problemas tienen recompensas cero la mayoría del tiempo (e.g., juego de ajedrez donde solo recibes recompensa al final: +1 si ganas, -1 si pierdes, 0 en medio).</li>
+
+                    <li><strong>(d) FALSO:</strong> RL maximiza la recompensa ACUMULADA a largo plazo, no solo el siguiente paso inmediato. Esto es crucial: a veces tienes que sacrificar recompensas inmediatas para obtener mayores recompensas futuras.</li>
+                </ul>
+
+                <p style="margin-top: 20px;"><strong>Explicación conceptual:</strong> Si solo maximizaras el siguiente paso, podrías quedar atrapado en óptimos locales. Por ejemplo, en un videojuego, rechazarías una ruta larga pero lucrativa por ganancia inmediata pequeña.</p>
+            </div>
+
+            <div class="question">
+                <h4>1.2 Actualización Q-Learning y Por Qué es Off-Policy</h4>
+
+                <p><strong>Describe la actualización de Q-Learning. ¿Es off-policy? ¿Por qué?</strong></p>
+            </div>
+
+            <div class="answer">
+                <strong>Respuesta Completa:</strong>
+
+                <p style="margin-top: 15px;"><strong>1. Ecuación de Actualización Q-Learning:</strong></p>
+
+                <div class="formula-block">
+                    $$Q(s,a) \leftarrow Q(s,a) + \alpha [r + \gamma \max_{a'} Q(s',a') - Q(s,a)]$$
                 </div>
 
-                <p style="margin-top: 20px;">Donde:</p>
+                <p style="margin-top: 15px;"><strong>Componentes:</strong></p>
                 <ul>
-                    <li>\(R = \max_i \|x_i\|\): máxima norma de los datos</li>
-                    <li>\(\gamma\): margen mínimo de separación (distancia mínima al hiperplano óptimo)</li>
+                    <li>$Q(s,a)$: Estimación actual del valor de tomar acción $a$ en estado $s$</li>
+                    <li>$\alpha$: Tasa de aprendizaje (cuánto peso dar a la nueva información)</li>
+                    <li>$r$: Recompensa observada inmediatamente</li>
+                    <li>$\gamma$: Factor de descuento (importancia del futuro)</li>
+                    <li>$\max_{a'} Q(s',a')$: Mejor valor estimado disponible en el próximo estado</li>
+                    <li>$[r + \gamma \max_{a'} Q(s',a') - Q(s,a)]$: Error TD (Temporal Difference)</li>
                 </ul>
+
+                <p style="margin-top: 20px;"><strong>2. ¿Es Off-Policy? SÍ, y aquí está por qué:</strong></p>
+
+                <div class="step">
+                    <p><strong>Definición técnica:</strong> Un algoritmo es off-policy si aprende una política (target policy) diferente a la que usa para generar datos (behavioral policy).</p>
+
+                    <p style="margin-top: 15px;"><strong>En Q-Learning:</strong></p>
+                    <ul>
+                        <li><strong>Behavioral Policy (exploración):</strong> Típicamente $\varepsilon$-greedy, que toma la mejor acción conocida con probabilidad $1-\varepsilon$ y acciones aleatorias con probabilidad $\varepsilon$</li>
+                        <li><strong>Target Policy (lo que aprendes):</strong> Greedy pura, $\pi^*(a|s) = \arg\max_a Q(s,a)$</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>¿Por qué son diferentes?</strong> Mira el $\max_{a'} Q(s',a')$ en la actualización. Este $\max$ asume que tomarás la mejor acción en el siguiente estado (greedy), PERO cuando realmente estés en $s'$, podrías tomar una acción aleatoria (debido a $\varepsilon$-greedy).</p>
+                </div>
+
+                <p style="margin-top: 20px;"><strong>3. Ventajas de ser Off-Policy:</strong></p>
+                <ul>
+                    <li><strong>Sample Efficiency:</strong> Aprendes la política óptima de experiencias no óptimas. Si el agente comete errores explorando, Q-Learning aún aprende de ello.</li>
+                    <li><strong>Reuse:</strong> Puedes reutilizar datos viejos generados por políticas antiguas</li>
+                    <li><strong>Online Learning:</strong> Puedes aprender mientras realizas exploración activa</li>
+                </ul>
+
+                <p style="margin-top: 15px;"><strong>Analogía:</strong> Es como aprender a jugar ajedrez viendo partidas de jugadores mediocres. Aunque los jugadores cometan errores, puedes identificar los mejores movimientos analizando sus partidas (el $\max$ en la ecuación).</p>
             </div>
 
-            <div class="info-box">
-                <strong>⚠️ Limitación crítica:</strong> El Perceptrón <strong>nunca convergerá</strong> si los datos no son linealmente separables. Esta fue la debilidad fundamental que motivó el desarrollo de SVM con margen suave.
+            <div class="question">
+                <h4>1.3 Problemas de Control vs Predicción</h4>
+
+                <p><strong>Explica la diferencia entre problemas de control y de predicción en RL.</strong></p>
             </div>
 
-            <h3>Cálculo Manual: Ejemplo Resuelto</h3>
-
-            <div class="example">
-                <p><strong>Problema:</strong> Aplicar el algoritmo del Perceptrón a los puntos:</p>
+            <div class="answer">
+                <strong>Respuesta Estructurada:</strong>
 
                 <table>
                     <thead>
                         <tr>
-                            <th>Punto</th>
-                            <th>\(x_1\)</th>
-                            <th>\(x_2\)</th>
-                            <th>Label \(y\)</th>
+                            <th>Dimensión</th>
+                            <th>Predicción</th>
+                            <th>Control</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>+1</td>
+                            <td><strong>Pregunta Central</strong></td>
+                            <td>"¿Cuánto valor tiene este estado bajo esta política?"</td>
+                            <td>"¿Cuál es la mejor política? ¿Cómo mejoro?"</td>
                         </tr>
                         <tr>
-                            <td>2</td>
-                            <td>2</td>
-                            <td>2</td>
-                            <td>+1</td>
+                            <td><strong>Objetivo Matemático</strong></td>
+                            <td>Estimar $V^\pi(s)$ o $Q^\pi(s,a)$</td>
+                            <td>Encontrar $\pi^* = \arg\max_\pi V^\pi(s)$</td>
                         </tr>
                         <tr>
-                            <td>3</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>-1</td>
+                            <td><strong>Entrada (Política)</strong></td>
+                            <td>Dada y fija (no cambia)</td>
+                            <td>Mejora iterativamente</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ejemplo</strong></td>
+                            <td>Evaluar: "Si siempre voy al café después del trabajo, ¿cuánta felicidad total tendré?"</td>
+                            <td>Optimizar: "¿Dónde debería ir después del trabajo para maximizar felicidad?"</td>
                         </tr>
                     </tbody>
                 </table>
 
-                <p style="margin-top: 25px;"><strong>Iteración 1:</strong> Inicializar \(\theta = [0, 0], \theta_0 = 0\)</p>
-                <ul>
-                    <li>Punto 1: \(y_1(\theta \cdot x_1 + \theta_0) = (+1)(0) = 0 \leq 0\) → <strong>Error</strong></li>
-                    <li>Actualizar: \(\theta \leftarrow [0,0] + 1 \cdot [1,1] = [1, 1]\); \(\theta_0 \leftarrow 0 + 1 = 1\)</li>
-                </ul>
+                <p style="margin-top: 20px;"><strong>En términos de actualizaciones:</strong></p>
 
-                <p style="margin-top: 15px;"><strong>Iteración 2:</strong> \(\theta = [1, 1], \theta_0 = 1\)</p>
-                <ul>
-                    <li>Punto 1: \((+1)(1 \cdot 1 + 1 \cdot 1 + 1) = 3 > 0\) → ✓</li>
-                    <li>Punto 2: \((+1)(1 \cdot 2 + 1 \cdot 2 + 1) = 5 > 0\) → ✓</li>
-                    <li>Punto 3: \((-1)(1 \cdot 0 + 1 \cdot 0 + 1) = -1 \leq 0\) → <strong>Error</strong></li>
-                    <li>Actualizar: \(\theta \leftarrow [1, 1] + (-1) \cdot [0, 0] = [1, 1]\); \(\theta_0 \leftarrow 1 - 1 = 0\)</li>
-                </ul>
+                <div class="formula-block">
+                    <p><strong>Predicción (Temporal Difference):</strong></p>
+                    $$V(s) \leftarrow V(s) + \alpha[r + \gamma V(s') - V(s)]$$
 
-                <p style="margin-top: 15px;"><strong>Iteración 3:</strong> \(\theta = [1, 1], \theta_0 = 0\)</p>
-                <ul>
-                    <li>Todos los puntos se clasifican correctamente → <strong>Convergencia</strong></li>
-                </ul>
-
-                <div class="formula" style="margin-top: 25px;">
-                    $$\boxed{\theta = (1, 1), \quad \theta_0 = 0}$$
+                    <p style="margin-top: 20px;"><strong>Control (Q-Learning):</strong></p>
+                    $$Q(s,a) \leftarrow Q(s,a) + \alpha[r + \gamma \max_{a'} Q(s',a') - Q(s,a)]$$
                 </div>
 
-                <div class="info-box" style="margin-top: 20px;">
-                    <strong>Nota:</strong> El resultado final depende del orden de presentación de los puntos. Diferentes órdenes pueden producir diferentes hiperplanos válidos, todos ellos separando correctamente los datos.
-                </div>
+                <p style="margin-top: 15px;"><strong>La diferencia clave:</strong> En predicción, usas $V(s')$ (el valor estimado bajo la política actual). En control, usas $\max_{a'} Q(s',a')$ (el mejor valor posible, aunque no sigas esa acción).</p>
+
+                <p style="margin-top: 15px;"><strong>¿Cuándo usas cada uno?</strong></p>
+                <ul>
+                    <li><strong>Predicción:</strong> Cuando ya tienes una buena política y solo quieres evaluarla o entenderla</li>
+                    <li><strong>Control:</strong> Cuando quieres aprender la mejor política desde cero (la mayoría de los casos)</li>
+                </ul>
             </div>
 
-            <h3>Dependencia del Orden de los Puntos</h3>
+            <div class="question">
+                <h4>1.4 Procesos de Decisión de Markov (MDPs)</h4>
 
-            <div class="key-point">
-                <strong>📌 El Perceptrón es sensible al orden:</strong> El orden en que se presentan los ejemplos afecta:
-                <ul style="margin-top: 15px;">
-                    <li>Los pesos finales \(\theta\) y \(\theta_0\) (aunque todos sean válidos si hay separación)</li>
-                    <li>El número de iteraciones hasta convergencia</li>
-                    <li>La orientación y posición final del hiperplano</li>
+                <p><strong>¿Qué es un MDP? ¿Qué relación tiene con RL?</strong></p>
+            </div>
+
+            <div class="answer">
+                <strong>Respuesta Completa:</strong>
+
+                <p style="margin-top: 15px;"><strong>1. Definición Formal de MDP:</strong></p>
+
+                <div class="formula-block theorem">
+                    Un Markov Decision Process es una tupla:
+                    $$\mathcal{M} = (S, A, P, R, \gamma)$$
+
+                    Donde:
+                    <ul style="margin-top: 15px;">
+                        <li>$S$: Conjunto finito de estados</li>
+                        <li>$A$: Conjunto finito de acciones</li>
+                        <li>$P(s'|s,a)$: Probabilidad de transición (dinámica)</li>
+                        <li>$R(s,a,s')$: Función de recompensa esperada</li>
+                        <li>$\gamma$: Factor de descuento</li>
+                    </ul>
+                </div>
+
+                <p style="margin-top: 20px;"><strong>2. Propiedad de Markov (Fundacional):</strong></p>
+
+                <div class="definition">
+                    <p>El futuro depende solo del presente, no del pasado:</p>
+                    $$P(S_{t+1} | S_t, A_t, S_{t-1}, A_{t-1}, \ldots) = P(S_{t+1} | S_t, A_t)$$
+
+                    <p style="margin-top: 15px;">En términos simples: el estado $S_t$ contiene TODA la información necesaria. No necesitas recordar qué pasó hace 10 pasos.</p>
+                </div>
+
+                <p style="margin-top: 20px;"><strong>3. Relación Íntima con RL:</strong></p>
+
+                <ul>
+                    <li><strong>MDPs formalizan los problemas de RL:</strong> Todo problema de RL que satisface la propiedad de Markov se puede modelar como MDP</li>
+
+                    <li><strong>Fundación teórica:</strong> Todas las ecuaciones de Bellman y algoritmos (Q-Learning, SARSA, etc.) asumen un MDP subyacente</li>
+
+                    <li><strong>Solución de MDPs = Solución de RL:</strong> Si puedes resolver el MDP (encontrar $\pi^*$), resuelves el problema de RL</li>
+
+                    <li><strong>Garantías teóricas:</strong> Los teoremas de convergencia de RL dependen de que el problema sea un MDP válido</li>
                 </ul>
 
-                <p style="margin-top: 15px;"><strong>Implicación práctica:</strong> Para reproducibilidad, usar aleatorización con semilla fija (seed) o presentar los datos en orden determinístico.</p>
+                <p style="margin-top: 20px;"><strong>En resumen:</strong> MDP es el marco matemático que formaliza los problemas de RL. Sin MDPs, RL sería solo "prueba y error" sin fundamentos. Con MDPs, tenemos ecuaciones, convergencia garantizada y soluciones óptimas.</p>
             </div>
 
-            <div class="divider"></div>
+            <div class="divider" style="height: 2px; background: var(--border-color); margin: 40px 0;"></div>
         </section>
 
-        <!-- SECTION 3: SVM -->
-        <section id="svm">
-            <h2><span class="section-number">3</span> Máquinas de Vectores de Soporte: Margen Máximo</h2>
+        <section>
+            <h2>📝 PROBLEMA 2: Clasificación Lineal - Perceptrón (2 puntos)</h2>
 
-            <h3>Motivación: Más Allá del Perceptrón</h3>
-
-            <p>Mientras que el Perceptrón busca <em>cualquier</em> hiperplano que separe los datos, SVM busca el hiperplano <strong>óptimo</strong> — el que maximiza el margen, la distancia mínima a los puntos más cercanos.</p>
-
-            <div class="concept">
-                <p><strong>Intuición:</strong> Un margen mayor implica mejor <em>capacidad de generalización</em>. El hiperplano está "más lejos" de los datos, haciendo el modelo más robusto a variaciones.</p>
+            <div class="note">
+                <strong>Nota:</strong> Este problema requiere algoritmo del perceptrón paso a paso. Basado en Sutton & Barto Cap. 8 y literatura clásica de aprendizaje supervisado.
             </div>
 
-            <h3>Formulación del Margen Máximo</h3>
+            <p style="margin-top: 20px;"><strong>Contexto del problema:</strong> Se te da un conjunto de puntos con etiquetas (+1 o -1). Aplicas el algoritmo del perceptrón secuencialmente, iniciando con θ=0 y θ₀=0.</p>
 
-            <p>El margen geométrico es la distancia perpendicular más pequeña entre el hiperplano y cualquier punto de entrenamiento:</p>
+            <div class="question">
+                <h4>2.1 - 2.7: Algoritmo del Perceptrón Paso a Paso</h4>
 
-            <div class="formula">
-                $$\text{Margen} = \frac{1}{\|\theta\|}$$
+                <p><strong>[Aquí iría la figura con los puntos específicos del problema]</strong></p>
+
+                <p>Dado que no tengo acceso a la imagen específica, te daré la metodología completa y un ejemplo genérico que puedes aplicar.</p>
             </div>
 
-            <p style="margin-top: 20px;">SVM resuelve el problema de optimización (margen duro):</p>
+            <div class="answer">
+                <strong>Metodología General del Perceptrón:</strong>
 
-            <div class="formula">
-                $$\min_{\theta, \theta_0} \quad \frac{1}{2}\|\theta\|^2$$
-                $$\text{sujeto a} \quad y_i(\theta \cdot x_i + \theta_0) \geq 1 \quad \forall i = 1, \ldots, m$$
-            </div>
+                <div class="formula-block">
+                    <p><strong>Actualización del Perceptrón:</strong></p>
+                    $$\text{Si } y_i(\theta \cdot x_i + \theta_0) \leq 0: \quad \begin{cases} \theta &\leftarrow \theta + y_i x_i \\ \theta_0 &\leftarrow \theta_0 + y_i \end{cases}$$
 
-            <div class="key-point">
-                <strong>¿Por qué \(\frac{1}{2}\|\theta\|^2\) en lugar de \(\|\theta\|\)?</strong>
-                <ul style="margin-top: 15px;">
-                    <li>Matemáticamente equivalente pero convexo y diferenciable</li>
-                    <li>El factor \(\frac{1}{2}\) simplifica derivadas</li>
-                    <li>Permite usar programación cuadrática</li>
-                </ul>
-            </div>
-
-            <h3>Vectores de Soporte y KKT</h3>
-
-            <div class="concept">
-                <p><strong>Vectores de Soporte:</strong> Son los puntos de entrenamiento que definen el margen. Cumplen la condición:</p>
-
-                <div class="formula" style="margin-top: 15px;">
-                    $$y_i(\theta \cdot x_i + \theta_0) = 1$$
+                    <p style="margin-top: 15px;">De lo contrario, no hay actualización.</p>
                 </div>
 
-                <p style="margin-top: 15px;"><strong>Propiedad fundamental:</strong> Típicamente solo 10-30% de los datos son vectores de soporte. Los demás puntos pueden moverse sin cambiar la solución. Esto hace SVM extremadamente eficiente.</p>
-            </div>
+                <p style="margin-top: 20px;"><strong>Ejemplo Trabajado:</strong></p>
 
-            <h3>Hinge Loss: Permitiendo Errores</h3>
+                <p>Supongamos puntos: $(1,1,+1), (2,2,+1), (0,0,-1)$ (formato: $x_1, x_2, y$)</p>
 
-            <p>El problema de margen duro asume separabilidad lineal perfecta. En datos reales, necesitamos permitir violaciones. Introducimos las <strong>variables de holgura</strong> \(\xi_i \geq 0\):</p>
+                <div class="step">
+                    <p><strong>Iteración 1:</strong> $\theta = [0,0], \theta_0 = 0$</p>
+                    <ul style="margin-top: 10px;">
+                        <li>Punto $(1,1,+1)$: $y(\theta \cdot x + \theta_0) = (+1)(0 \cdot 1 + 0 \cdot 1 + 0) = 0 \leq 0$ → ERROR</li>
+                        <li>Actualizar: $\theta \leftarrow [0,0] + (+1)[1,1] = [1,1]$; $\theta_0 \leftarrow 0 + (+1) = 1$</li>
+                    </ul>
 
-            <div class="formula">
-                $$\min_{\theta, \theta_0, \xi} \quad \frac{1}{2}\|\theta\|^2 + C\sum_{i=1}^m \xi_i$$
-                $$\text{s.t.} \quad y_i(\theta \cdot x_i + \theta_0) \geq 1 - \xi_i, \quad \xi_i \geq 0$$
-            </div>
+                    <p style="margin-top: 15px;"><strong>Iteración 2:</strong> $\theta = [1,1], \theta_0 = 1$</p>
+                    <ul style="margin-top: 10px;">
+                        <li>Punto $(1,1,+1)$: $y(\theta \cdot x + \theta_0) = (+1)(1 + 1 + 1) = 3 > 0$ → OK</li>
+                        <li>Punto $(2,2,+1)$: $y(\theta \cdot x + \theta_0) = (+1)(2 + 2 + 1) = 5 > 0$ → OK</li>
+                        <li>Punto $(0,0,-1)$: $y(\theta \cdot x + \theta_0) = (-1)(0 + 0 + 1) = -1 \leq 0$ → ERROR</li>
+                        <li>Actualizar: $\theta \leftarrow [1,1] + (-1)[0,0] = [1,1]$; $\theta_0 \leftarrow 1 + (-1) = 0$</li>
+                    </ul>
 
-            <p style="margin-top: 20px;">Equivalentemente, usando Hinge Loss:</p>
-
-            <div class="formula">
-                $$L_{\text{hinge}}(y, \hat{y}) = \max(0, 1 - y \cdot \hat{y})$$
-            </div>
-
-            <div class="info-box">
-                <strong>Interpretación de \(C\):</strong>
-                <ul style="margin-top: 10px;">
-                    <li>\(C\) pequeño: Margen más amplio, tolera más errores (underfitting)</li>
-                    <li>\(C\) grande: Penaliza más los errores, margen más estrecho (overfitting)</li>
-                    <li>\(C \to \infty\): Margen duro (separabilidad perfecta)</li>
-                </ul>
-            </div>
-
-            <h3>Formulación Dual y Condiciones KKT</h3>
-
-            <p>El problema dual es más fácil de resolver numéricamente y revela la estructura del problema:</p>
-
-            <div class="formula">
-                $$\max_{\alpha} \quad \sum_{i=1}^m \alpha_i - \frac{1}{2}\sum_{i,j} \alpha_i \alpha_j y_i y_j (x_i \cdot x_j)$$
-                $$\text{s.t.} \quad 0 \leq \alpha_i \leq C, \quad \sum_{i=1}^m \alpha_i y_i = 0$$
-            </div>
-
-            <p style="margin-top: 20px;"><strong>Condiciones KKT (Karush-Kuhn-Tucker):</strong></p>
-
-            <div class="formula">
-                $$\alpha_i [y_i(\theta \cdot x_i + \theta_0) - 1 + \xi_i] = 0$$
-                $$(C - \alpha_i)\xi_i = 0$$
-            </div>
-
-            <div class="key-point">
-                <strong>🔑 Interpretación crucial:</strong> Si \(\alpha_i > 0\), entonces \(x_i\) es un vector de soporte. Estos son los únicos puntos que importan para la solución final. Todos los demás puntos pueden cambiar sin afectar el modelo.
-            </div>
-
-            <h3>Propiedades Teóricas de SVM</h3>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Propiedad</th>
-                        <th>Verdadero/Falso</th>
-                        <th>Justificación</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>El problema primal es convexo</td>
-                        <td>✓ <strong>Verdadero</strong></td>
-                        <td>Función cuadrática convexa + restricciones lineales = problema convexo con mínimo único</td>
-                    </tr>
-                    <tr>
-                        <td>SVM requiere normalización de datos</td>
-                        <td>✓ <strong>Verdadero</strong></td>
-                        <td>\(C\) controla el margen en términos de las normas de los datos</td>
-                    </tr>
-                    <tr>
-                        <td>Todos los datos son vectores de soporte</td>
-                        <td>✗ <strong>Falso</strong></td>
-                        <td>Típicamente \(|\text{SV}| \ll m\); solo puntos cercanos al margen importan</td>
-                    </tr>
-                    <tr>
-                        <td>SVM solo funciona para lineales</td>
-                        <td>✗ <strong>Falso</strong></td>
-                        <td>Con kernels, puede resolver problemas altamente no-lineales (siguiente sección)</td>
-                    </tr>
-                    <tr>
-                        <td>Si \(C \to \infty\), obtenemos margen duro</td>
-                        <td>✓ <strong>Verdadero</strong></td>
-                        <td>Penalización infinita de errores fuerza \(\xi_i = 0\)</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="divider"></div>
-        </section>
-
-        <!-- SECTION 4: KERNELS -->
-        <section id="kernels">
-            <h2><span class="section-number">4</span> Kernels: El Truco para No-Linealidad</h2>
-
-            <h3>El Problema: No-Linealidad en Datos Reales</h3>
-
-            <p>Los datos reales raramente son separables linealmente. Una aproximación ingenua es mapearlos a un espacio de dimensión mucho mayor donde sean separables:</p>
-
-            <div class="formula">
-                $$x \mapsto \phi(x) \in \mathbb{R}^D, \quad D \gg d$$
-            </div>
-
-            <p style="margin-top: 15px;">El problema: Si \(D\) es muy grande, \(\phi(x) \cdot \phi(x')\) es computacionalmente costoso.</p>
-
-            <div class="key-point">
-                <strong>💡 El Truco del Kernel:</strong> Definir un kernel \(K(x, x') = \phi(x) \cdot \phi(x')\) que computa el producto interno <em>sin calcular explícitamente</em> \(\phi(x)\).
-            </div>
-
-            <h3>Kernels Polinomiales</h3>
-
-            <p>El kernel polinomial de grado \(d\) realiza un mapeo implícito a un espacio polinomial:</p>
-
-            <div class="formula">
-                $$K(x, x'; d) = (x \cdot x' + c)^d$$
-            </div>
-
-            <p style="margin-top: 20px;"><strong>Ejemplos comunes:</strong></p>
-
-            <div class="concept">
-                <ul>
-                    <li><span class="highlight">Kernel \(K_1\):</span> \(K(x, x') = (x \cdot x' + 1)^2\) — grado 2 con sesgo</li>
-                    <li><span class="highlight">Kernel \(K_2\):</span> \(K(x, x') = (x \cdot x')^2\) — grado 2 sin sesgo, productos puros</li>
-                    <li><span class="highlight">Kernel \(K_3\):</span> \(K(x, x') = (x \cdot x' + 1)^3\) — grado 3, más complejo</li>
-                </ul>
-
-                <p style="margin-top: 15px;"><strong>Interpretación:</strong></p>
-                <ul>
-                    <li>Mayor grado \(d\) = mayor flexibilidad = riesgo de overfitting</li>
-                    <li>El parámetro \(c\) ajusta la importancia de términos de bajo grado</li>
-                    <li>Kernel polinomial produce límites de decisión curvos (cónicas, parábolas)</li>
-                </ul>
-            </div>
-
-            <h3>Kernel RBF (Gaussiano)</h3>
-
-            <p>El kernel RBF (Radial Basis Function) es el más versátil, mapeando implícitamente a un espacio infinito-dimensional:</p>
-
-            <div class="formula">
-                $$K(x, x'; \gamma) = \exp\left(-\gamma \|x - x'\|^2\right)$$
-            </div>
-
-            <p style="margin-top: 20px;">De forma equivalente:</p>
-
-            <div class="formula">
-                $$K(x, x'; \sigma) = \exp\left(-\frac{\|x - x'\|^2}{2\sigma^2}\right)$$
-            </div>
-
-            <div class="concept">
-                <p style="margin-top: 15px;"><strong>Parámetro \(\gamma\) (o \(\sigma\)):</strong></p>
-                <ul>
-                    <li>\(\gamma\) pequeño (σ grande): Kernel suave, baja "rugosidad", generaliza mejor</li>
-                    <li>\(\gamma\) grande (σ pequeño): Kernel afilado, "sigue" los datos, riesgo de overfitting</li>
-                    <li>Valores típicos: \(\gamma \in [10^{-6}, 1]\)</li>
-                </ul>
-
-                <p style="margin-top: 15px;"><strong>Ventajas de RBF:</strong></p>
-                <ul>
-                    <li>✓ Puede aproximar casi cualquier función continua</li>
-                    <li>✓ Flexible para datos altamente no-lineales</li>
-                    <li>✓ Solo un parámetro a ajustar (\(\gamma\))</li>
-                    <li>✗ Puede overfitear si \(\gamma\) es muy grande</li>
-                </ul>
-            </div>
-
-            <h3>Margen Suave (\(C_1\)) vs Margen Duro (\(C_2\))</h3>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Aspecto</th>
-                        <th>Margen Duro (\(C_2 \to \infty\))</th>
-                        <th>Margen Suave (\(C_1\) finito)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Restricción</strong></td>
-                        <td>\(y_i(\theta \cdot x_i + \theta_0) \geq 1\) (exacta)</td>
-                        <td>\(y_i(\theta \cdot x_i + \theta_0) \geq 1 - \xi_i\) (relajada)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Requiere</strong></td>
-                        <td>Datos perfectamente separables</td>
-                        <td>Tolera puntos ruidosos o outliers</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Margen</strong></td>
-                        <td>Muy estrecho (pasa entre puntos)</td>
-                        <td>Más amplio (sacrifica algunos puntos)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Generalización</strong></td>
-                        <td>Pobre en datos ruidosos</td>
-                        <td>Mejor en problemas reales</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Uso</strong></td>
-                        <td>Raramente (datos ideales)</td>
-                        <td>Estándar en práctica</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>Identificación de Kernels por Gráfica</h3>
-
-            <div class="info-box">
-                <strong>📊 Cómo reconocer qué kernel se usó:</strong>
-                <ul>
-                    <li><strong>Límites rectos:</strong> Kernel lineal \(K(x,x') = x \cdot x'\)</li>
-                    <li><strong>Elipses/círculos simples:</strong> Kernel polinomial bajo grado (K1, K2)</li>
-                    <li><strong>Límites suavemente curvos:</strong> Kernel polinomial grado 3+ o RBF con \(\gamma\) moderado</li>
-                    <li><strong>Límites muy complejos/irregulares:</strong> RBF con \(\gamma\) grande o kernel polinomial muy alto grado</li>
-                    <li><strong>Margen muy estrecho:</strong> \(C\) muy grande o \(\gamma\) muy grande (overfitting)</li>
-                    <li><strong>Margen más amplio/simple:</strong> \(C\) más pequeño o kernel menos flexible</li>
-                </ul>
-            </div>
-
-            <div class="divider"></div>
-        </section>
-
-        <!-- SECTION 5: DEEP LEARNING -->
-        <section id="deep">
-            <h2><span class="section-number">5</span> Aprendizaje Profundo: Redes Neuronales Modernas</h2>
-
-            <h3>Maldición de la Dimensionalidad</h3>
-
-            <p>Un fenómeno crítico en aprendizaje automático: a medida que aumenta la dimensión, el espacio crece exponencialmente, haciendo que los datos se vuelvan dispersos.</p>
-
-            <div class="formula">
-                $$\text{Volumen}([-1,1]^d) = 2^d$$
-            </div>
-
-            <div class="concept">
-                <p style="margin-top: 15px;"><strong>Consecuencias catastróficas:</strong></p>
-                <ul>
-                    <li>Necesitamos exponencialmente más datos para mantener densidad: si en \(d=1\) necesitamos 10 puntos/unidad, en \(d=100\) necesitamos \(10^{100}\) puntos totales</li>
-                    <li>Las distancias entre puntos aleatorios se vuelven más uniformes (pierden significado)</li>
-                    <li>La mayoría de los datos caen en los bordes del hipercubo</li>
-                    <li>Métodos como k-NN y clustering colapsan</li>
-                </ul>
-
-                <div class="formula" style="margin-top: 20px;">
-                    $$\text{Ejemplo numérico: Para mantener} \approx 1 \text{ punto por hiper-volumen:}$$
-                    $$d=1: \text{10 puntos}, \quad d=10: 10^{10} \text{ puntos}, \quad d=100: 10^{100} \text{ puntos}$$
-                </div>
-            </div>
-
-            <div class="key-point">
-                <strong>🔑 Solución: Aprendizaje Profundo</strong>
-                <ul style="margin-top: 15px;">
-                    <li>Aprender representaciones latentes en espacios de baja dimensión</li>
-                    <li>Cada capa extrae características cada vez más abstractas</li>
-                    <li>Reduce efectivamente la dimensionalidad del problema</li>
-                </ul>
-            </div>
-
-            <h3>Función de Regresión y MSE</h3>
-
-            <p>Una red neuronal profunda es una composición de capas no-lineales:</p>
-
-            <div class="formula">
-                $$\hat{y} = f(x; \theta) = W_\ell \sigma(W_{\ell-1} \sigma(\cdots \sigma(W_1 x + b_1) \cdots) + b_{\ell-1}) + b_\ell$$
-            </div>
-
-            <p style="margin-top: 15px;">Donde \(\sigma(\cdot)\) es una función de activación no-lineal (e.g., ReLU).</p>
-
-            <p style="margin-top: 15px;"><strong>Error cuadrático medio (MSE):</strong> Función de pérdida estándar para regresión:</p>
-
-            <div class="formula">
-                $$\mathcal{L}_{\text{MSE}} = \frac{1}{m}\sum_{i=1}^m (y_i - \hat{y}_i)^2$$
-            </div>
-
-            <div class="info-box">
-                <ul>
-                    <li>Penaliza errores grandes más que pequeños (cuadrado)</li>
-                    <li>Derivable → útil para descenso de gradiente</li>
-                    <li>Sensible a outliers (por el cuadrado)</li>
-                    <li>Alternativa robusta: MAE \(= \frac{1}{m}\sum_i |y_i - \hat{y}_i|\)</li>
-                </ul>
-            </div>
-
-            <h3>Deep Learning vs Shallow Learning</h3>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Dimensión</th>
-                        <th>Shallow (1-2 capas)</th>
-                        <th>Deep (5+ capas)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Capacidad de Representación</strong></td>
-                        <td>Limitada a features casi-lineales/simples</td>
-                        <td>Puede aprender features complejas y jerárquicas</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Datos Necesarios</strong></td>
-                        <td>Menos datos (modelo simple)</td>
-                        <td>Muchos datos (pero escalabilidad mejor)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Tiempo de Entrenamiento</strong></td>
-                        <td>Rápido (CPU suficiente)</td>
-                        <td>Lento (requiere GPU/TPU)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Problemas Resueltos</strong></td>
-                        <td>Datos tabulares simples, problemas clásicos</td>
-                        <td>Visión, Lenguaje, Audio, Control</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Interpretabilidad</strong></td>
-                        <td>Alta (pesos más interpretables)</td>
-                        <td>Baja ("cajas negras")</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>SGD: Descenso de Gradiente Estocástico</h3>
-
-            <p>Batch GD computa gradientes sobre todo el dataset, que es lento para datos grandes. SGD actualiza con mini-batches:</p>
-
-            <div class="formula">
-                $$\theta \leftarrow \theta - \alpha \nabla \mathcal{L}(\theta; \text{batch})$$
-            </div>
-
-            <div class="concept">
-                <p style="margin-top: 15px;"><strong>Variantes:</strong></p>
-                <ul>
-                    <li><strong>Batch GD:</strong> Todo el dataset → lento pero estable</li>
-                    <li><strong>Stochastic GD:</strong> Un punto → rápido pero ruidoso</li>
-                    <li><strong>Mini-batch SGD:</strong> \(32-512\) puntos → balance óptimo</li>
-                </ul>
-
-                <p style="margin-top: 15px;"><strong>Ventajas de SGD:</strong></p>
-                <ul>
-                    <li>✓ Escala a datasets de miles de millones</li>
-                    <li>✓ Convergencia más rápida en práctica</li>
-                    <li>✓ Ruido ayuda a escapar mínimos locales</li>
-                    <li>✓ Memoria constante (no carga todo el dataset)</li>
-                    <li>✓ Permite aprendizaje online (continuo)</li>
-                </ul>
-            </div>
-
-            <h3>Silver & Sutton: "Era de la Experiencia"</h3>
-
-            <div class="key-point">
-                <p><strong>📖 Paradigma de Silver & Sutton (AlphaGo, AlphaStar):</strong> Estamos en la "Era de la Experiencia" donde:</p>
-
-                <div class="formula" style="margin-top: 20px;">
-                    $$\text{Rendimiento} \propto \text{Escala de datos} \times \text{Escala de compute}$$
+                    <p style="margin-top: 15px;"><strong>Iteración 3:</strong> $\theta = [1,1], \theta_0 = 0$</p>
+                    <ul style="margin-top: 10px;">
+                        <li>Todos los puntos se clasifican correctamente → <strong>CONVERGENCIA</strong></li>
+                    </ul>
                 </div>
 
-                <p style="margin-top: 20px;"><strong>Implicaciones revolucionarias:</strong></p>
+                <p style="margin-top: 20px;"><strong>Respuestas para preguntas 2.1-2.2 (usando ejemplo):</strong></p>
                 <ul>
-                    <li><span class="highlight">Datos \(\gg\) Algoritmo:</span> La cantidad de datos es más importante que el algoritmo específico</li>
-                    <li><span class="highlight">Escala \(\gg\) Optimización:</span> Una red grande entrenada simplemente vence a una pequeña optimizada ingeniosamente</li>
-                    <li><span class="highlight">Experiencia \(\gg\) Labels:</span> El aprendizaje por refuerzo genera "experiencia" infinita automáticamente</li>
-                    <li><span class="highlight">Compute es el bottleneck:</span> GPUs/TPUs son el recurso limitante, no las ideas</li>
+                    <li>2.1 $\theta_0 = 0$</li>
+                    <li>2.2 $\theta = (1, 1)$</li>
                 </ul>
 
-                <div class="formula" style="margin-top: 20px;">
-                    $$\text{AlphaGo: Jugar millones de partidas} \to \text{Superhuman en Go}$$
+                <p style="margin-top: 20px;"><strong>2.3 Dependencia del Orden</strong></p>
+
+                <div class="formula-block">
+                    <p>Respuesta: <strong>Depende</strong></p>
+
+                    <p style="margin-top: 15px;">Justificación: El orden de los puntos afecta:</p>
+                    <ul style="margin-top: 10px;">
+                        <li>Qué punto se procesa primero y causa el primer error</li>
+                        <li>Cómo evoluciona θ a lo largo de las iteraciones</li>
+                        <li>El número total de iteraciones hasta convergencia</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;">Sin embargo, si el conjunto es linealmente separable, el perceptrón <strong>convergará</strong> sin importar el orden (por Teorema de Novikoff), pero los parámetros finales pueden ser diferentes.</p>
+
+                    <p style="margin-top: 15px;">Para saber si punto específico podría ser primero procesado, revisa si su procesamiento inicial produciría los errores observados en la tabla.</p>
                 </div>
-            </div>
 
-            <h3>Backpropagation: El Motor del Aprendizaje Profundo</h3>
+                <p style="margin-top: 20px;"><strong>2.4-2.7: Margen Máximo (SVM)</strong></p>
 
-            <p>Backpropagation (Rumelhart et al., 1986) computa gradientes eficientemente usando la regla de la cadena. Sin él, entrenar redes profundas sería computacionalmente prohibitivo.</p>
+                <p>Para la solución de margen máximo, necesitamos encontrar θ y θ₀ que:</p>
 
-            <div class="formula">
-                $$\frac{\partial \mathcal{L}}{\partial \theta} = \frac{\partial \mathcal{L}}{\partial \hat{y}} \cdot \frac{\partial \hat{y}}{\partial h_{\ell}} \cdot \frac{\partial h_{\ell}}{\partial h_{\ell-1}} \cdots \frac{\partial h_2}{\partial \theta}$$
-            </div>
+                <div class="formula-block theorem">
+                    $$\min \frac{1}{2}\|\theta\|^2$$
+                    $$\text{s.t. } y_i(\theta \cdot x_i + \theta_0) \geq 1 \quad \forall i$$
+                </div>
 
-            <div class="concept">
-                <p style="margin-top: 15px;"><strong>Algoritmo en dos fases:</strong></p>
+                <p style="margin-top: 15px;"><strong>Sin los puntos específicos, el procedimiento es:</strong></p>
+
                 <ol>
-                    <li><strong>Forward pass:</strong> Propagar datos \(x \to \hat{y}\), guardar todas las activaciones</li>
-                    <li><strong>Backward pass:</strong> Propagar el error \(\hat{y} \to x\), computar \(\nabla \mathcal{L}\) usando activaciones guardadas</li>
+                    <li>Identificar cuáles puntos son vectores de soporte (aquellos con $y(\theta \cdot x + \theta_0) = 1$)</li>
+                    <li>Resolver el sistema de ecuaciones lineales</li>
+                    <li>Calcular margen como $\frac{1}{\|\theta\|}$</li>
+                    <li>Calcular Hinge Loss para cada punto</li>
                 </ol>
-
-                <div class="formula" style="margin-top: 15px;">
-                    $$\text{Complejidad: Forward} = O(n_{\text{parámetros}}), \quad \text{Backward} \approx 2 \times \text{Forward}$$
-                </div>
-
-                <p style="margin-top: 15px;"><strong>¿Por qué es tan eficiente?</strong></p>
-                <ul>
-                    <li>Reutiliza cálculos intermedios (no recalcula derivadas parciales)</li>
-                    <li>\(O(n)\) en lugar de \(O(n^2)\) o peor</li>
-                    <li>Fundamental para entrenar redes de millones de parámetros</li>
-                </ul>
             </div>
 
-            <h3>ReLU y Mapeo de Regiones</h3>
-
-            <p>La función de activación ReLU es la más utilizada en redes modernas:</p>
-
-            <div class="formula">
-                $$\text{ReLU}(x) = \max(0, x)$$
-            </div>
-
-            <div class="concept">
-                <p style="margin-top: 15px;"><strong>Ventajas sobre sigmoid/tanh:</strong></p>
-                <ul>
-                    <li>✓ Computacionalmente eficiente (una comparación)</li>
-                    <li>✓ Gradientes bien comportados (no se saturen)</li>
-                    <li>✓ Induce sparsidad (muchas neuronas inactivas = eficiencia)</li>
-                    <li>✓ Acelera convergencia 6-10x comparado con sigmoid</li>
-                    <li>✗ "Dead ReLU": Si \(z < 0\) siempre, la neurona nunca aprende (variantes: Leaky ReLU, ELU)</li>
-                </ul>
-            </div>
-
-            <p style="margin-top: 25px;"><strong>Capacidad de Representación:</strong> Una red ReLU profunda mapea el espacio de entrada en regiones lineales por partes. Cada región tiene su propio clasificador/regresor lineal.</p>
-
-            <div class="formula" style="margin-top: 20px;">
-                $$\text{Con } d \text{ capas ocultas: } \approx 2^d \text{ regiones}$$
-            </div>
-
-            <div class="key-point">
-                <strong>💡 Por qué "Deep" Learning:</strong> La profundidad es exponencialmente más eficiente que el ancho:
-                <ul style="margin-top: 15px;">
-                    <li>Red shallow con \(k\) neuronas: \(O(k)\) regiones</li>
-                    <li>Red profunda con \(d\) capas: \(O(2^d)\) regiones</li>
-                    <li>Para 256 regiones: profundo necesita 8 capas, shallow necesita 256 neuronas</li>
-                </ul>
-            </div>
-
-            <div class="divider"></div>
+            <div class="divider" style="height: 2px; background: var(--border-color); margin: 40px 0;"></div>
         </section>
 
-        <!-- CONCLUSION -->
-        <section style="background: linear-gradient(135deg, #1a3a52 0%, #2e5266 100%); color: white; border-left: none; text-align: center;">
-            <h2 style="color: white; border-bottom-color: rgba(255,255,255,0.3);">🎓 Dominio Experto: Conclusión</h2>
-
-            <p style="color: rgba(255, 255, 255, 0.95); font-size: 1.15em; margin-top: 25px;">Tras completar esta guía exhaustiva, tienes ahora la base teórica para:</p>
-
-            <div style="text-align: left; display: inline-block; max-width: 600px; margin: 30px auto;">
-                <ul style="color: rgba(255, 255, 255, 0.9); font-size: 1.05em;">
-                    <li>✓ Entender <strong>cualquier</strong> algoritmo de ML moderno</li>
-                    <li>✓ Implementar desde cero (no solo usar librerías)</li>
-                    <li>✓ Elegir el algoritmo correcto para cada problema</li>
-                    <li>✓ Debuggear problemas en entrenamiento</li>
-                    <li>✓ Optimizar modelos para producción</li>
-                    <li>✓ Leer papers de investigación en IA</li>
-                    <li>✓ Contribuir a avances en inteligencia artificial</li>
-                </ul>
-            </div>
-
-            <p style="color: rgba(255, 255, 255, 0.85); font-style: italic; margin-top: 30px;">La verdadera maestría viene de la práctica deliberada.</p>
-        </section>
+        <!-- CONTINUARÁ CON PROBLEMAS 3, 4, 5 EN SIGUIENTE SEGMENTO -->
     </div>
 
     <footer>
-        <p><strong>Guía Definitiva de Machine Learning</strong></p>
-        <p>Aprendizaje por Refuerzo • Clasificación Lineal • SVM • Kernels • Deep Learning</p>
-        <p style="margin-top: 20px; opacity: 0.8;">Basada en literatura académica clásica y moderna en inteligencia artificial</p>
-        <div class="references">
-            <p><strong>Referencias Principales:</strong></p>
-            <div class="reference-item">Sutton, R. S., & Barto, A. G. (2018). <em>Reinforcement Learning: An Introduction</em>. MIT Press.</div>
-            <div class="reference-item">Hastie, T., Tibshirani, R., & Friedman, J. (2009). <em>The Elements of Statistical Learning</em>. Springer.</div>
-            <div class="reference-item">Goodfellow, I., Bengio, Y., & Courville, A. (2016). <em>Deep Learning</em>. MIT Press.</div>
-            <div class="reference-item">Cristianini, N., & Shawe-Taylor, J. (2000). <em>An Introduction to Support Vector Machines</em>. Cambridge University Press.</div>
-        </div>
+        <p><strong>RL Mastery: Curso Basado en Sutton & Barto</strong></p>
+        <p>Fundamentos Completos + Entrenamiento para Examen</p>
+        <p style="margin-top: 15px;">© 2026 | Basado en: Sutton, R. S., & Barto, A. G. (2018). Reinforcement Learning: An Introduction (2nd ed.). MIT Press.</p>
     </footer>
 </body>
 </html>
